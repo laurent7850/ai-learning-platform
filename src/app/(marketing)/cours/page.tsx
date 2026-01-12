@@ -36,7 +36,7 @@ const demoCourses = [
     level: "INTERMEDIATE" as const,
     category: "prompting",
     duration: 180,
-    requiredPlan: "STARTER" as const,
+    requiredPlan: "BEGINNER" as const,
     _count: { enrollments: 890 },
   },
   {
@@ -84,7 +84,7 @@ const demoCourses = [
     level: "INTERMEDIATE" as const,
     category: "image",
     duration: 160,
-    requiredPlan: "STARTER" as const,
+    requiredPlan: "BEGINNER" as const,
     _count: { enrollments: 520 },
   },
 ];
