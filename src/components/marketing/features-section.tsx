@@ -28,56 +28,56 @@ const features: Feature[] = [
     title: "Cours accessibles",
     description:
       "Pas besoin de compétences techniques. Nos cours sont conçus pour tous les niveaux.",
-    gradient: "from-blue-500 to-cyan-500",
+    gradient: "from-blue-600 to-blue-700",
   },
   {
     icon: Zap,
     title: "Apprentissage pratique",
     description:
       "Des exercices concrets et des projets réels pour appliquer immédiatement vos connaissances.",
-    gradient: "from-amber-500 to-orange-500",
+    gradient: "from-cyan-600 to-cyan-700",
   },
   {
     icon: Target,
     title: "Parcours personnalisé",
     description:
       "Deux niveaux (Débutant et Intermédiaire) pour progresser à votre rythme.",
-    gradient: "from-green-500 to-emerald-500",
+    gradient: "from-teal-600 to-teal-700",
   },
   {
     icon: Clock,
     title: "Accès 24/7",
     description:
       "Apprenez quand vous voulez, où vous voulez. Les cours restent accessibles indéfiniment.",
-    gradient: "from-purple-500 to-pink-500",
+    gradient: "from-indigo-600 to-indigo-700",
   },
   {
     icon: Award,
     title: "Certificats reconnus",
     description:
       "Obtenez des certificats à partager sur LinkedIn et valoriser vos compétences.",
-    gradient: "from-rose-500 to-red-500",
+    gradient: "from-slate-600 to-slate-700",
   },
   {
     icon: Shield,
     title: "Éthique IA",
     description:
       "Apprenez les bonnes pratiques et l'utilisation responsable de l'intelligence artificielle.",
-    gradient: "from-teal-500 to-cyan-500",
+    gradient: "from-sky-600 to-sky-700",
   },
   {
     icon: Sparkles,
     title: "Contenus actualisés",
     description:
       "Nos cours sont régulièrement mis à jour pour suivre les dernières avancées de l'IA.",
-    gradient: "from-indigo-500 to-violet-500",
+    gradient: "from-blue-600 to-indigo-700",
   },
   {
     icon: TrendingUp,
     title: "ROI garanti",
     description:
       "Gagnez du temps et boostez votre productivité dès les premières leçons.",
-    gradient: "from-fuchsia-500 to-pink-500",
+    gradient: "from-cyan-600 to-teal-700",
   },
 ];
 

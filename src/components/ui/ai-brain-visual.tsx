@@ -7,40 +7,40 @@ export function AIBrainVisual({ className }: { className?: string }) {
     <div className={`relative ${className}`}>
       {/* Main brain container */}
       <div className="relative w-full aspect-square max-w-md mx-auto">
-        {/* Outer glow ring */}
+        {/* Subtle outer glow ring */}
         <motion.div
-          className="absolute inset-0 rounded-full bg-gradient-to-r from-primary/20 via-accent/20 to-primary/20 blur-2xl"
+          className="absolute inset-0 rounded-full bg-primary/10 blur-3xl"
           animate={{
-            scale: [1, 1.1, 1],
-            opacity: [0.5, 0.8, 0.5],
+            scale: [1, 1.05, 1],
+            opacity: [0.3, 0.4, 0.3],
           }}
           transition={{
-            duration: 4,
+            duration: 6,
             repeat: Infinity,
             ease: "easeInOut",
           }}
         />
 
-        {/* Animated rings */}
+        {/* Subtle animated rings */}
         {[...Array(3)].map((_, i) => (
           <motion.div
             key={i}
-            className="absolute inset-0 rounded-full border border-primary/30"
+            className="absolute inset-0 rounded-full border border-primary/20"
             style={{
               scale: 0.6 + i * 0.15,
             }}
             animate={{
               rotate: i % 2 === 0 ? 360 : -360,
-              scale: [0.6 + i * 0.15, 0.65 + i * 0.15, 0.6 + i * 0.15],
+              scale: [0.6 + i * 0.15, 0.62 + i * 0.15, 0.6 + i * 0.15],
             }}
             transition={{
               rotate: {
-                duration: 20 + i * 5,
+                duration: 30 + i * 10,
                 repeat: Infinity,
                 ease: "linear",
               },
               scale: {
-                duration: 3,
+                duration: 5,
                 repeat: Infinity,
                 ease: "easeInOut",
                 delay: i * 0.5,
@@ -98,27 +98,27 @@ export function AIBrainVisual({ className }: { className?: string }) {
               />
             </motion.svg>
 
-            {/* Pulsing dots around the brain */}
-            {[...Array(8)].map((_, i) => {
-              const angle = (i * 360) / 8;
+            {/* Subtle pulsing dots around the brain */}
+            {[...Array(6)].map((_, i) => {
+              const angle = (i * 360) / 6;
               const x = Math.cos((angle * Math.PI) / 180) * 70;
               const y = Math.sin((angle * Math.PI) / 180) * 70;
               return (
                 <motion.div
                   key={i}
-                  className="absolute w-2 h-2 rounded-full bg-primary"
+                  className="absolute w-1.5 h-1.5 rounded-full bg-primary/70"
                   style={{
-                    left: `calc(50% + ${x}px - 4px)`,
-                    top: `calc(50% + ${y}px - 4px)`,
+                    left: `calc(50% + ${x}px - 3px)`,
+                    top: `calc(50% + ${y}px - 3px)`,
                   }}
                   animate={{
-                    scale: [1, 1.5, 1],
-                    opacity: [0.3, 1, 0.3],
+                    scale: [1, 1.3, 1],
+                    opacity: [0.4, 0.8, 0.4],
                   }}
                   transition={{
-                    duration: 2,
+                    duration: 3,
                     repeat: Infinity,
-                    delay: i * 0.2,
+                    delay: i * 0.3,
                     ease: "easeInOut",
                   }}
                 />
@@ -130,8 +130,8 @@ export function AIBrainVisual({ className }: { className?: string }) {
               className="absolute inset-0 w-full h-full"
               style={{ transform: "scale(2.5)" }}
             >
-              {[...Array(8)].map((_, i) => {
-                const angle = (i * 360) / 8;
+              {[...Array(6)].map((_, i) => {
+                const angle = (i * 360) / 6;
                 const x = Math.cos((angle * Math.PI) / 180) * 28;
                 const y = Math.sin((angle * Math.PI) / 180) * 28;
                 return (
@@ -143,12 +143,12 @@ export function AIBrainVisual({ className }: { className?: string }) {
                     y2={`calc(50% + ${y}px)`}
                     stroke="hsl(var(--primary))"
                     strokeWidth="0.5"
-                    strokeOpacity="0.3"
+                    strokeOpacity="0.2"
                     initial={{ pathLength: 0 }}
                     animate={{ pathLength: 1 }}
                     transition={{
-                      duration: 1,
-                      delay: 0.5 + i * 0.1,
+                      duration: 1.5,
+                      delay: 0.5 + i * 0.15,
                       ease: "easeOut",
                     }}
                   />
@@ -158,23 +158,21 @@ export function AIBrainVisual({ className }: { className?: string }) {
           </div>
         </motion.div>
 
-        {/* Floating data particles */}
-        {[...Array(12)].map((_, i) => (
+        {/* Subtle floating data particles */}
+        {[...Array(8)].map((_, i) => (
           <motion.div
             key={i}
-            className="absolute w-1 h-1 rounded-full bg-accent"
+            className="absolute w-1 h-1 rounded-full bg-primary/40"
             style={{
-              left: `${20 + Math.random() * 60}%`,
-              top: `${20 + Math.random() * 60}%`,
+              left: `${25 + Math.random() * 50}%`,
+              top: `${25 + Math.random() * 50}%`,
             }}
             animate={{
-              y: [0, -20, 0],
-              x: [0, Math.random() * 10 - 5, 0],
-              opacity: [0, 1, 0],
-              scale: [0.5, 1, 0.5],
+              y: [0, -15, 0],
+              opacity: [0, 0.6, 0],
             }}
             transition={{
-              duration: 3 + Math.random() * 2,
+              duration: 4 + Math.random() * 2,
               repeat: Infinity,
               delay: Math.random() * 3,
               ease: "easeInOut",

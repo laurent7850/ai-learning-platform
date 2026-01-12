@@ -13,13 +13,13 @@ const stats = [
   { icon: Award, label: "satisfaction", value: "98%" },
 ];
 
-// Avatars fictifs pour le social proof
+// Avatars fictifs pour le social proof - couleurs sobres et professionnelles
 const avatars = [
-  { initials: "SM", color: "from-blue-500 to-cyan-500" },
-  { initials: "TD", color: "from-purple-500 to-pink-500" },
-  { initials: "ML", color: "from-amber-500 to-orange-500" },
-  { initials: "PB", color: "from-green-500 to-emerald-500" },
-  { initials: "CF", color: "from-rose-500 to-red-500" },
+  { initials: "SM", color: "from-slate-600 to-slate-700" },
+  { initials: "TD", color: "from-blue-600 to-blue-700" },
+  { initials: "ML", color: "from-indigo-600 to-indigo-700" },
+  { initials: "PB", color: "from-cyan-600 to-cyan-700" },
+  { initials: "CF", color: "from-teal-600 to-teal-700" },
 ];
 
 export function HeroSection() {
@@ -108,11 +108,11 @@ export function HeroSection() {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
-                {/* Glow effect */}
-                <div className="absolute -inset-1 rounded-xl bg-gradient-to-r from-primary via-accent to-primary opacity-50 blur-lg group-hover:opacity-75 transition-opacity duration-300" />
+                {/* Subtle glow effect */}
+                <div className="absolute -inset-0.5 rounded-xl bg-primary/20 blur-md group-hover:bg-primary/30 transition-all duration-300" />
                 <Button
                   size="xl"
-                  className="relative bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-white shadow-xl"
+                  className="relative bg-primary hover:bg-primary/90 text-white shadow-lg"
                   asChild
                 >
                   <Link href="/inscription">

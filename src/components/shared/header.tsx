@@ -58,8 +58,8 @@ export function Header() {
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 group">
           <motion.div
-            className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-accent shadow-lg"
-            whileHover={{ scale: 1.05, rotate: 5 }}
+            className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-blue-600 to-indigo-600 shadow-md"
+            whileHover={{ scale: 1.05, rotate: 3 }}
             whileTap={{ scale: 0.95 }}
           >
             <Brain className="h-5 w-5 text-white" />
@@ -112,7 +112,7 @@ export function Header() {
                       src={session.user?.image || ""}
                       alt={session.user?.name || ""}
                     />
-                    <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-white text-xs">
+                    <AvatarFallback className="bg-gradient-to-br from-blue-600 to-indigo-600 text-white text-xs">
                       {getInitials(session.user?.name || "U")}
                     </AvatarFallback>
                   </Avatar>
@@ -129,7 +129,7 @@ export function Header() {
                       src={session.user?.image || ""}
                       alt={session.user?.name || ""}
                     />
-                    <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-white">
+                    <AvatarFallback className="bg-gradient-to-br from-blue-600 to-indigo-600 text-white">
                       {getInitials(session.user?.name || "U")}
                     </AvatarFallback>
                   </Avatar>
@@ -192,8 +192,8 @@ export function Header() {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
-                <div className="absolute -inset-1 rounded-lg bg-gradient-to-r from-primary to-accent opacity-50 blur group-hover:opacity-75 transition-opacity duration-300" />
-                <Button className="relative bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-white" asChild>
+                <div className="absolute -inset-0.5 rounded-lg bg-blue-600/20 blur-sm group-hover:bg-blue-600/30 transition-all duration-300" />
+                <Button className="relative bg-blue-600 hover:bg-blue-700 text-white shadow-sm" asChild>
                   <Link href="/inscription">Créer mon compte</Link>
                 </Button>
               </motion.div>
@@ -279,7 +279,7 @@ export function Header() {
                           src={session?.user?.image || ""}
                           alt={session?.user?.name || ""}
                         />
-                        <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-white">
+                        <AvatarFallback className="bg-gradient-to-br from-blue-600 to-indigo-600 text-white">
                           {getInitials(session?.user?.name || "U")}
                         </AvatarFallback>
                       </Avatar>
@@ -327,9 +327,9 @@ export function Header() {
                       className="relative"
                       whileTap={{ scale: 0.98 }}
                     >
-                      <div className="absolute -inset-1 rounded-lg bg-gradient-to-r from-primary to-accent opacity-50 blur" />
+                      <div className="absolute -inset-0.5 rounded-lg bg-blue-600/20 blur-sm" />
                       <Button
-                        className="w-full relative bg-gradient-to-r from-primary to-accent text-white"
+                        className="w-full relative bg-blue-600 hover:bg-blue-700 text-white"
                         asChild
                         onClick={() => setMobileMenuOpen(false)}
                       >

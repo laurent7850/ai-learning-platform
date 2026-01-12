@@ -19,8 +19,8 @@ const planIcons = {
 
 const planGradients = {
   FREE: "from-slate-500 to-slate-600",
-  BEGINNER: "from-blue-500 to-cyan-500",
-  PRO: "from-primary via-accent to-primary",
+  BEGINNER: "from-blue-600 to-blue-700",
+  PRO: "from-blue-600 to-indigo-600",
 };
 
 export function PricingSection() {
@@ -128,9 +128,9 @@ export function PricingSection() {
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 className={`group relative ${plan.popular ? "md:-mt-4 md:mb-4" : ""}`}
               >
-                {/* Popular plan glow effect */}
+                {/* Popular plan subtle border */}
                 {plan.popular && (
-                  <div className="absolute -inset-[1px] rounded-2xl bg-gradient-to-r from-primary via-accent to-primary opacity-75 blur-sm animate-pulse-glow" />
+                  <div className="absolute -inset-[1px] rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 opacity-50 blur-[2px]" />
                 )}
 
                 {/* Card */}
@@ -150,11 +150,11 @@ export function PricingSection() {
                         transition={{ delay: 0.3 }}
                         className="flex gap-2"
                       >
-                        <Badge className="bg-gradient-to-r from-primary to-accent text-white border-0 shadow-lg px-3 py-1 text-xs">
+                        <Badge className="bg-blue-600 text-white border-0 shadow-md px-3 py-1 text-xs">
                           <Sparkles className="h-3 w-3 mr-1" />
                           Populaire
                         </Badge>
-                        <Badge className="bg-gradient-to-r from-green-500 to-emerald-500 text-white border-0 shadow-lg px-3 py-1 text-xs">
+                        <Badge className="bg-emerald-600 text-white border-0 shadow-md px-3 py-1 text-xs">
                           <TrendingUp className="h-3 w-3 mr-1" />
                           Meilleur rapport qualité-prix
                         </Badge>
@@ -211,13 +211,13 @@ export function PricingSection() {
                     whileTap={{ scale: 0.98 }}
                   >
                     {plan.popular && (
-                      <div className="absolute -inset-1 rounded-xl bg-gradient-to-r from-primary via-accent to-primary opacity-50 blur-lg group-hover/btn:opacity-75 transition-opacity duration-300" />
+                      <div className="absolute -inset-0.5 rounded-xl bg-blue-600/30 blur-md group-hover/btn:bg-blue-600/40 transition-all duration-300" />
                     )}
                     <Button
                       variant={plan.popular ? "default" : "outline"}
                       className={`w-full relative ${
                         plan.popular
-                          ? "bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-white shadow-lg"
+                          ? "bg-blue-600 hover:bg-blue-700 text-white shadow-md"
                           : "hover:border-primary/40 hover:bg-primary/5"
                       }`}
                       asChild

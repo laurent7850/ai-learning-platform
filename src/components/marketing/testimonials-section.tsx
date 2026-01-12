@@ -60,9 +60,9 @@ const testimonials = [
 
 function TestimonialCard({ testimonial }: { testimonial: typeof testimonials[0] }) {
   return (
-    <div className="group relative w-[350px] shrink-0 rounded-2xl border border-border/50 bg-card p-6 transition-all duration-300 hover:border-primary/30 hover:shadow-xl">
-      {/* Gradient glow on hover */}
-      <div className="absolute -inset-px rounded-2xl bg-gradient-to-r from-primary/20 to-accent/20 opacity-0 blur-xl transition-opacity duration-500 group-hover:opacity-50" />
+    <div className="group relative w-[350px] shrink-0 rounded-2xl border border-border/50 bg-card p-6 transition-all duration-300 hover:border-primary/20 hover:shadow-lg">
+      {/* Subtle glow on hover */}
+      <div className="absolute -inset-px rounded-2xl bg-primary/5 opacity-0 blur-lg transition-opacity duration-500 group-hover:opacity-100" />
 
       {/* Quote icon */}
       <Quote className="absolute top-4 right-4 h-10 w-10 text-primary/10 group-hover:text-primary/20 transition-colors" />
@@ -90,9 +90,9 @@ function TestimonialCard({ testimonial }: { testimonial: typeof testimonials[0] 
 
         {/* Author */}
         <div className="flex items-center gap-3">
-          <Avatar className="h-12 w-12 ring-2 ring-background shadow-lg">
+          <Avatar className="h-12 w-12 ring-2 ring-background shadow-md">
             <AvatarImage src={testimonial.avatar} alt={testimonial.name} />
-            <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-white font-semibold">
+            <AvatarFallback className="bg-gradient-to-br from-blue-600 to-indigo-600 text-white font-semibold">
               {getInitials(testimonial.name)}
             </AvatarFallback>
           </Avatar>

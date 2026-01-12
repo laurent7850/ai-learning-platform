@@ -30,46 +30,46 @@ export function CTASection() {
           <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.1)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.1)_1px,transparent_1px)] bg-[size:4rem_4rem]" />
 
           <motion.div
-            className="absolute -top-32 -right-32 h-80 w-80 rounded-full bg-white/20 blur-3xl"
+            className="absolute -top-32 -right-32 h-80 w-80 rounded-full bg-white/10 blur-3xl"
             animate={{
-              scale: [1, 1.2, 1],
-              opacity: [0.2, 0.3, 0.2],
+              scale: [1, 1.1, 1],
+              opacity: [0.1, 0.15, 0.1],
             }}
             transition={{
-              duration: 6,
+              duration: 8,
               repeat: Infinity,
               ease: "easeInOut",
             }}
           />
           <motion.div
-            className="absolute -bottom-32 -left-32 h-80 w-80 rounded-full bg-accent/30 blur-3xl"
+            className="absolute -bottom-32 -left-32 h-80 w-80 rounded-full bg-white/10 blur-3xl"
             animate={{
-              scale: [1.2, 1, 1.2],
-              opacity: [0.2, 0.3, 0.2],
+              scale: [1.1, 1, 1.1],
+              opacity: [0.1, 0.15, 0.1],
             }}
             transition={{
-              duration: 6,
+              duration: 8,
               repeat: Infinity,
               ease: "easeInOut",
               delay: 2,
             }}
           />
 
-          {/* Floating particles */}
-          {[...Array(15)].map((_, i) => (
+          {/* Subtle floating particles */}
+          {[...Array(8)].map((_, i) => (
             <motion.div
               key={i}
-              className="absolute w-1 h-1 rounded-full bg-white/40"
+              className="absolute w-1 h-1 rounded-full bg-white/20"
               style={{
                 left: `${Math.random() * 100}%`,
                 top: `${Math.random() * 100}%`,
               }}
               animate={{
-                y: [0, -30, 0],
-                opacity: [0, 1, 0],
+                y: [0, -20, 0],
+                opacity: [0, 0.5, 0],
               }}
               transition={{
-                duration: 3 + Math.random() * 2,
+                duration: 4 + Math.random() * 2,
                 repeat: Infinity,
                 delay: Math.random() * 3,
                 ease: "easeInOut",
@@ -122,10 +122,10 @@ export function CTASection() {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
-                <div className="absolute -inset-1 rounded-xl bg-white opacity-30 blur-lg group-hover:opacity-50 transition-opacity duration-300" />
+                <div className="absolute -inset-0.5 rounded-xl bg-white/20 blur-md group-hover:bg-white/30 transition-all duration-300" />
                 <Button
                   size="xl"
-                  className="relative bg-white text-primary hover:bg-white/90 shadow-xl font-semibold"
+                  className="relative bg-white text-primary hover:bg-white/95 shadow-lg font-semibold"
                   asChild
                 >
                   <Link href="/inscription">

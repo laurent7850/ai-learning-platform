@@ -10,40 +10,40 @@ interface AnimatedGridBackgroundProps {
 export function AnimatedGridBackground({ className }: AnimatedGridBackgroundProps) {
   return (
     <div className={`absolute inset-0 overflow-hidden ${className}`}>
-      {/* Animated gradient orbs */}
+      {/* Subtle animated gradient orbs */}
       <motion.div
-        className="absolute -top-40 -right-40 h-80 w-80 rounded-full bg-primary/30 blur-[100px]"
+        className="absolute -top-40 -right-40 h-80 w-80 rounded-full bg-primary/15 blur-[120px]"
         animate={{
-          scale: [1, 1.2, 1],
-          opacity: [0.3, 0.5, 0.3],
+          scale: [1, 1.1, 1],
+          opacity: [0.15, 0.25, 0.15],
         }}
         transition={{
-          duration: 8,
+          duration: 10,
           repeat: Infinity,
           ease: "easeInOut",
         }}
       />
       <motion.div
-        className="absolute -bottom-40 -left-40 h-80 w-80 rounded-full bg-accent/30 blur-[100px]"
+        className="absolute -bottom-40 -left-40 h-80 w-80 rounded-full bg-accent/15 blur-[120px]"
         animate={{
-          scale: [1.2, 1, 1.2],
-          opacity: [0.3, 0.5, 0.3],
+          scale: [1.1, 1, 1.1],
+          opacity: [0.15, 0.25, 0.15],
         }}
         transition={{
-          duration: 8,
+          duration: 10,
           repeat: Infinity,
           ease: "easeInOut",
           delay: 2,
         }}
       />
       <motion.div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-96 w-96 rounded-full bg-primary/20 blur-[120px]"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-96 w-96 rounded-full bg-primary/10 blur-[150px]"
         animate={{
-          scale: [1, 1.3, 1],
-          opacity: [0.2, 0.4, 0.2],
+          scale: [1, 1.15, 1],
+          opacity: [0.1, 0.2, 0.1],
         }}
         transition={{
-          duration: 10,
+          duration: 12,
           repeat: Infinity,
           ease: "easeInOut",
           delay: 1,
@@ -81,21 +81,21 @@ export function AnimatedGridBackground({ className }: AnimatedGridBackgroundProp
         <rect width="100%" height="100%" fill="url(#grid)" mask="url(#gridMask)" />
       </svg>
 
-      {/* Floating particles */}
-      {[...Array(20)].map((_, i) => (
+      {/* Subtle floating particles */}
+      {[...Array(12)].map((_, i) => (
         <motion.div
           key={i}
-          className="absolute h-1 w-1 rounded-full bg-primary/40"
+          className="absolute h-1 w-1 rounded-full bg-primary/20"
           style={{
             left: `${Math.random() * 100}%`,
             top: `${Math.random() * 100}%`,
           }}
           animate={{
-            y: [0, -30, 0],
-            opacity: [0, 1, 0],
+            y: [0, -20, 0],
+            opacity: [0, 0.6, 0],
           }}
           transition={{
-            duration: 3 + Math.random() * 2,
+            duration: 4 + Math.random() * 2,
             repeat: Infinity,
             delay: Math.random() * 5,
             ease: "easeInOut",
