@@ -43,7 +43,7 @@ export async function POST(req: Request) {
     }
 
     const body = await req.json();
-    const { title, slug, description, thumbnail, level, requiredPlan, published } =
+    const { title, slug, description, thumbnail, level, requiredPlan, published, category, duration } =
       body;
 
     if (!title || !description) {
@@ -55,10 +55,12 @@ export async function POST(req: Request) {
         title,
         slug: slug || title.toLowerCase().replace(/\s+/g, "-"),
         description,
-        thumbnail: thumbnail || null,
+        thumbnail: thumbnail || "",
         level: level || "BEGINNER",
         requiredPlan: requiredPlan || "FREE",
         published: published || false,
+        category: category || "Intelligence Artificielle",
+        duration: duration || 0,
       },
     });
 

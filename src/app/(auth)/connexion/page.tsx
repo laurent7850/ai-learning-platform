@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
@@ -18,7 +18,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-export default function LoginPage() {
+function LoginForm() {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("redirect") || "/dashboard";
   const error = searchParams.get("error");
@@ -127,12 +127,12 @@ export default function LoginPage() {
             ) : (
               <Mail className="mr-2 h-4 w-4" />
             )}
-            Se connecter avec l'email
+            Se connecter avec l&apos;email
           </Button>
         </form>
 
         <p className="text-xs text-muted-foreground text-center">
-          Mode démo : entrez n'importe quel email pour vous connecter.
+          Mode démo : entrez n&apos;importe quel email pour vous connecter.
         </p>
       </CardContent>
 
@@ -148,5 +148,19 @@ export default function LoginPage() {
         </p>
       </CardFooter>
     </Card>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <Card className="w-full max-w-md">
+        <CardContent className="p-8 flex items-center justify-center">
+          <Loader2 className="h-8 w-8 animate-spin" />
+        </CardContent>
+      </Card>
+    }>
+      <LoginForm />
+    </Suspense>
   );
 }

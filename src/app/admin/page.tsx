@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { Suspense } from "react";
 import Link from "next/link";
 import {
@@ -55,7 +57,7 @@ async function getAdminStats() {
     }),
     db.enrollment.findMany({
       take: 5,
-      orderBy: { enrolledAt: "desc" },
+      orderBy: { createdAt: "desc" },
       include: {
         user: {
           select: { name: true, email: true },
@@ -209,7 +211,7 @@ async function AdminDashboardContent() {
               {stats.recentUsers.map((user) => (
                 <div key={user.id} className="flex items-center gap-3">
                   <div className="flex h-9 w-9 items-center justify-center rounded-full bg-muted text-sm font-medium">
-                    {user.name?.[0]?.toUpperCase() || user.email[0].toUpperCase()}
+                    {user.name?.[0]?.toUpperCase() || user.email?.[0]?.toUpperCase() || "?"}
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium truncate">
@@ -260,7 +262,7 @@ async function AdminDashboardContent() {
                     </p>
                   </div>
                   <span className="text-xs text-muted-foreground">
-                    {formatDate(enrollment.enrolledAt)}
+                    {formatDate(enrollment.createdAt)}
                   </span>
                 </div>
               ))}

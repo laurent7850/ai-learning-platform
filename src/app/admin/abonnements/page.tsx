@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { Suspense } from "react";
 import { CreditCard, TrendingUp, Users, DollarSign, Calendar } from "lucide-react";
 import { db } from "@/lib/db";

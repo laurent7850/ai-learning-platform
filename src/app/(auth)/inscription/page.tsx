@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
@@ -25,7 +25,7 @@ const benefits = [
   "Communauté Discord",
 ];
 
-export default function RegisterPage() {
+function RegisterForm() {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("redirect") || "/dashboard";
   const plan = searchParams.get("plan");
@@ -210,5 +210,24 @@ export default function RegisterPage() {
         </CardFooter>
       </Card>
     </div>
+  );
+}
+
+export default function RegisterPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex flex-col lg:flex-row gap-8 w-full max-w-4xl">
+        <div className="lg:w-1/2 flex items-center justify-center">
+          <Loader2 className="h-8 w-8 animate-spin" />
+        </div>
+        <Card className="lg:w-1/2">
+          <CardContent className="p-8 flex items-center justify-center">
+            <Loader2 className="h-8 w-8 animate-spin" />
+          </CardContent>
+        </Card>
+      </div>
+    }>
+      <RegisterForm />
+    </Suspense>
   );
 }
