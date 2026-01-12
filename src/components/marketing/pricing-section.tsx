@@ -141,21 +141,20 @@ export function PricingSection() {
                       : "border-border/50 hover:border-primary/30"
                   }`}
                 >
-                  {/* Popular badge with two tags */}
+                  {/* Popular badge - discret */}
                   {plan.popular && (
-                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1">
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2">
                       <motion.div
                         initial={{ y: -10, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
                         transition={{ delay: 0.3 }}
                         className="flex gap-2"
                       >
-                        <Badge className="bg-blue-600 text-white border-0 shadow-md px-3 py-1 text-xs">
-                          <Sparkles className="h-3 w-3 mr-1" />
+                        <Badge variant="secondary" className="bg-slate-800 text-slate-200 border border-slate-700 px-3 py-1 text-xs font-medium">
+                          <Sparkles className="h-3 w-3 mr-1.5 text-slate-400" />
                           Populaire
                         </Badge>
-                        <Badge className="bg-emerald-600 text-white border-0 shadow-md px-3 py-1 text-xs">
-                          <TrendingUp className="h-3 w-3 mr-1" />
+                        <Badge variant="secondary" className="bg-slate-800 text-emerald-400 border border-slate-700 px-3 py-1 text-xs font-medium">
                           Meilleur rapport qualité-prix
                         </Badge>
                       </motion.div>
