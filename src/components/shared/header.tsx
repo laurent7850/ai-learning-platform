@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
 import {
   Brain,
   Menu,
@@ -32,43 +32,70 @@ export function Header() {
   const pathname = usePathname();
   const { data: session, status } = useSession();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const { scrollY } = useScroll();
+
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    setIsScrolled(latest > 50);
+  });
 
   const isLoading = status === "loading";
   const isAuthenticated = status === "authenticated";
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <motion.header
+      className={cn(
+        "sticky top-0 z-50 w-full transition-all duration-300",
+        isScrolled
+          ? "bg-background/80 backdrop-blur-xl border-b border-border/50 shadow-sm"
+          : "bg-transparent border-b border-transparent"
+      )}
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 0.3, ease: "easeOut" }}
+    >
       <nav className="container flex h-16 items-center justify-between">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg gradient-primary">
+        <Link href="/" className="flex items-center gap-2 group">
+          <motion.div
+            className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-accent shadow-lg"
+            whileHover={{ scale: 1.05, rotate: 5 }}
+            whileTap={{ scale: 0.95 }}
+          >
             <Brain className="h-5 w-5 text-white" />
-          </div>
-          <span className="hidden font-bold text-xl sm:inline-block">
+          </motion.div>
+          <span className="hidden font-bold text-xl sm:inline-block group-hover:text-primary transition-colors">
             {siteConfig.name}
           </span>
         </Link>
 
         {/* Desktop Navigation */}
-        <div className="hidden md:flex md:items-center md:gap-6">
+        <div className="hidden md:flex md:items-center md:gap-1">
           {navItems.map((item) => (
             <Link
               key={item.href}
               href={item.href}
               className={cn(
-                "text-sm font-medium transition-colors hover:text-primary",
+                "relative px-4 py-2 text-sm font-medium transition-colors rounded-lg",
                 pathname === item.href
                   ? "text-primary"
-                  : "text-muted-foreground"
+                  : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
               )}
             >
               {item.title}
+              {pathname === item.href && (
+                <motion.div
+                  layoutId="activeNav"
+                  className="absolute inset-0 bg-primary/10 rounded-lg"
+                  transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                />
+              )}
             </Link>
           ))}
         </div>
 
         {/* Desktop Actions */}
-        <div className="hidden md:flex md:items-center md:gap-4">
+        <div className="hidden md:flex md:items-center md:gap-3">
           <ThemeToggle />
 
           {isLoading ? (
@@ -78,31 +105,31 @@ export function Header() {
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="ghost"
-                  className="flex items-center gap-2 px-2"
+                  className="flex items-center gap-2 px-2 hover:bg-muted/50"
                 >
-                  <Avatar className="h-8 w-8">
+                  <Avatar className="h-8 w-8 ring-2 ring-background">
                     <AvatarImage
                       src={session.user?.image || ""}
                       alt={session.user?.name || ""}
                     />
-                    <AvatarFallback>
+                    <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-white text-xs">
                       {getInitials(session.user?.name || "U")}
                     </AvatarFallback>
                   </Avatar>
-                  <span className="hidden lg:inline-block">
+                  <span className="hidden lg:inline-block font-medium">
                     {session.user?.name?.split(" ")[0]}
                   </span>
                   <ChevronDown className="h-4 w-4 opacity-50" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56">
-                <div className="flex items-center gap-2 p-2">
+              <DropdownMenuContent align="end" className="w-56 p-2">
+                <div className="flex items-center gap-3 p-2 mb-2">
                   <Avatar className="h-10 w-10">
                     <AvatarImage
                       src={session.user?.image || ""}
                       alt={session.user?.name || ""}
                     />
-                    <AvatarFallback>
+                    <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-white">
                       {getInitials(session.user?.name || "U")}
                     </AvatarFallback>
                   </Avatar>
@@ -110,26 +137,26 @@ export function Header() {
                     <span className="text-sm font-medium">
                       {session.user?.name}
                     </span>
-                    <span className="text-xs text-muted-foreground">
+                    <span className="text-xs text-muted-foreground truncate max-w-[150px]">
                       {session.user?.email}
                     </span>
                   </div>
                 </div>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                  <Link href="/dashboard" className="cursor-pointer">
+                <DropdownMenuItem asChild className="cursor-pointer">
+                  <Link href="/dashboard">
                     <LayoutDashboard className="mr-2 h-4 w-4" />
                     Tableau de bord
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/dashboard/mes-cours" className="cursor-pointer">
+                <DropdownMenuItem asChild className="cursor-pointer">
+                  <Link href="/dashboard/mes-cours">
                     <User className="mr-2 h-4 w-4" />
                     Mes cours
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/dashboard/profil" className="cursor-pointer">
+                <DropdownMenuItem asChild className="cursor-pointer">
+                  <Link href="/dashboard/profil">
                     <Settings className="mr-2 h-4 w-4" />
                     Paramètres
                   </Link>
@@ -137,8 +164,8 @@ export function Header() {
                 {session.user?.role === "ADMIN" && (
                   <>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem asChild>
-                      <Link href="/admin" className="cursor-pointer">
+                    <DropdownMenuItem asChild className="cursor-pointer">
+                      <Link href="/admin">
                         <Settings className="mr-2 h-4 w-4" />
                         Administration
                       </Link>
@@ -148,7 +175,7 @@ export function Header() {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   onClick={() => signOut({ callbackUrl: "/" })}
-                  className="cursor-pointer text-destructive focus:text-destructive"
+                  className="cursor-pointer text-destructive focus:text-destructive focus:bg-destructive/10"
                 >
                   <LogOut className="mr-2 h-4 w-4" />
                   Déconnexion
@@ -157,12 +184,19 @@ export function Header() {
             </DropdownMenu>
           ) : (
             <>
-              <Button variant="ghost" asChild>
+              <Button variant="ghost" className="hover:bg-muted/50" asChild>
                 <Link href="/connexion">Connexion</Link>
               </Button>
-              <Button asChild>
-                <Link href="/inscription">Commencer gratuitement</Link>
-              </Button>
+              <motion.div
+                className="relative group"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <div className="absolute -inset-1 rounded-lg bg-gradient-to-r from-primary to-accent opacity-50 blur group-hover:opacity-75 transition-opacity duration-300" />
+                <Button className="relative bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-white" asChild>
+                  <Link href="/inscription">Créer mon compte</Link>
+                </Button>
+              </motion.div>
             </>
           )}
         </div>
@@ -174,12 +208,31 @@ export function Header() {
             variant="ghost"
             size="icon"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="hover:bg-muted/50"
           >
-            {mobileMenuOpen ? (
-              <X className="h-5 w-5" />
-            ) : (
-              <Menu className="h-5 w-5" />
-            )}
+            <AnimatePresence mode="wait">
+              {mobileMenuOpen ? (
+                <motion.div
+                  key="close"
+                  initial={{ rotate: -90, opacity: 0 }}
+                  animate={{ rotate: 0, opacity: 1 }}
+                  exit={{ rotate: 90, opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <X className="h-5 w-5" />
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="menu"
+                  initial={{ rotate: 90, opacity: 0 }}
+                  animate={{ rotate: 0, opacity: 1 }}
+                  exit={{ rotate: -90, opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <Menu className="h-5 w-5" />
+                </motion.div>
+              )}
+            </AnimatePresence>
           </Button>
         </div>
       </nav>
@@ -191,56 +244,66 @@ export function Header() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="border-t md:hidden"
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="border-t border-border/50 md:hidden bg-background/95 backdrop-blur-xl"
           >
-            <div className="container py-4 space-y-4">
-              {navItems.map((item) => (
-                <Link
+            <div className="container py-4 space-y-2">
+              {navItems.map((item, index) => (
+                <motion.div
                   key={item.href}
-                  href={item.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={cn(
-                    "block py-2 text-sm font-medium transition-colors hover:text-primary",
-                    pathname === item.href
-                      ? "text-primary"
-                      : "text-muted-foreground"
-                  )}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.05 }}
                 >
-                  {item.title}
-                </Link>
+                  <Link
+                    href={item.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={cn(
+                      "block py-3 px-4 text-sm font-medium transition-colors rounded-lg",
+                      pathname === item.href
+                        ? "text-primary bg-primary/10"
+                        : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                    )}
+                  >
+                    {item.title}
+                  </Link>
+                </motion.div>
               ))}
 
-              <div className="border-t pt-4 space-y-2">
+              <div className="border-t border-border/50 pt-4 mt-4 space-y-2">
                 {isAuthenticated ? (
                   <>
-                    <div className="flex items-center gap-3 py-2">
-                      <Avatar className="h-10 w-10">
+                    <div className="flex items-center gap-3 py-3 px-4">
+                      <Avatar className="h-10 w-10 ring-2 ring-background">
                         <AvatarImage
                           src={session?.user?.image || ""}
                           alt={session?.user?.name || ""}
                         />
-                        <AvatarFallback>
+                        <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-white">
                           {getInitials(session?.user?.name || "U")}
                         </AvatarFallback>
                       </Avatar>
                       <div>
                         <p className="font-medium">{session?.user?.name}</p>
-                        <p className="text-sm text-muted-foreground">
+                        <p className="text-sm text-muted-foreground truncate max-w-[200px]">
                           {session?.user?.email}
                         </p>
                       </div>
                     </div>
                     <Button
                       variant="outline"
-                      className="w-full"
+                      className="w-full justify-start hover:bg-muted/50"
                       asChild
                       onClick={() => setMobileMenuOpen(false)}
                     >
-                      <Link href="/dashboard">Tableau de bord</Link>
+                      <Link href="/dashboard">
+                        <LayoutDashboard className="mr-2 h-4 w-4" />
+                        Tableau de bord
+                      </Link>
                     </Button>
                     <Button
                       variant="ghost"
-                      className="w-full text-destructive hover:text-destructive"
+                      className="w-full justify-start text-destructive hover:text-destructive hover:bg-destructive/10"
                       onClick={() => {
                         setMobileMenuOpen(false);
                         signOut({ callbackUrl: "/" });
@@ -260,13 +323,19 @@ export function Header() {
                     >
                       <Link href="/connexion">Connexion</Link>
                     </Button>
-                    <Button
-                      className="w-full"
-                      asChild
-                      onClick={() => setMobileMenuOpen(false)}
+                    <motion.div
+                      className="relative"
+                      whileTap={{ scale: 0.98 }}
                     >
-                      <Link href="/inscription">Commencer gratuitement</Link>
-                    </Button>
+                      <div className="absolute -inset-1 rounded-lg bg-gradient-to-r from-primary to-accent opacity-50 blur" />
+                      <Button
+                        className="w-full relative bg-gradient-to-r from-primary to-accent text-white"
+                        asChild
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        <Link href="/inscription">Créer mon compte</Link>
+                      </Button>
+                    </motion.div>
                   </>
                 )}
               </div>
@@ -274,6 +343,6 @@ export function Header() {
           </motion.div>
         )}
       </AnimatePresence>
-    </header>
+    </motion.header>
   );
 }

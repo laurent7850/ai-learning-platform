@@ -3,12 +3,12 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Save, Loader2 } from "lucide-react";
+import { ArrowLeft, Save, Loader2, ImageIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import {
   Select,
   SelectContent,
@@ -17,9 +17,24 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
+import { useToast } from "@/hooks/use-toast";
+
+const CATEGORIES = [
+  "Intelligence Artificielle",
+  "ChatGPT",
+  "Prompting",
+  "Automatisation",
+  "Productivité",
+  "Image IA",
+  "Audio IA",
+  "Vidéo IA",
+  "Agents IA",
+  "Business",
+];
 
 export default function NewCoursePage() {
   const router = useRouter();
+  const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
@@ -27,6 +42,7 @@ export default function NewCoursePage() {
     description: "",
     thumbnail: "",
     level: "BEGINNER",
+    category: "Intelligence Artificielle",
     requiredPlan: "FREE",
     published: false,
   });
@@ -61,14 +77,25 @@ export default function NewCoursePage() {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to create course");
+        const error = await response.text();
+        throw new Error(error || "Failed to create course");
       }
 
       const course = await response.json();
+
+      toast({
+        title: "Cours créé",
+        description: `Le cours "${course.title}" a été créé avec succès.`,
+      });
+
       router.push(`/admin/cours/${course.id}`);
     } catch (error) {
       console.error("Error creating course:", error);
-      alert("Erreur lors de la création du cours");
+      toast({
+        title: "Erreur",
+        description: "Impossible de créer le cours. Vérifiez que le slug n'existe pas déjà.",
+        variant: "destructive",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -94,6 +121,9 @@ export default function NewCoursePage() {
         <Card>
           <CardHeader>
             <CardTitle>Informations générales</CardTitle>
+            <CardDescription>
+              Les informations de base qui apparaîtront sur la page du cours
+            </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
@@ -138,14 +168,35 @@ export default function NewCoursePage() {
 
             <div className="space-y-2">
               <Label htmlFor="thumbnail">Image de couverture (URL)</Label>
-              <Input
-                id="thumbnail"
-                value={formData.thumbnail}
-                onChange={(e) =>
-                  setFormData((prev) => ({ ...prev, thumbnail: e.target.value }))
-                }
-                placeholder="https://example.com/image.jpg"
-              />
+              <div className="flex gap-4">
+                <div className="flex-1">
+                  <Input
+                    id="thumbnail"
+                    value={formData.thumbnail}
+                    onChange={(e) =>
+                      setFormData((prev) => ({ ...prev, thumbnail: e.target.value }))
+                    }
+                    placeholder="https://example.com/image.jpg"
+                  />
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Recommandé: 1280x720 pixels (16:9)
+                  </p>
+                </div>
+                <div className="h-20 w-32 rounded-lg bg-muted flex items-center justify-center overflow-hidden shrink-0">
+                  {formData.thumbnail ? (
+                    <img
+                      src={formData.thumbnail}
+                      alt="Preview"
+                      className="h-full w-full object-cover"
+                      onError={(e) => {
+                        e.currentTarget.style.display = "none";
+                        e.currentTarget.nextElementSibling?.classList.remove("hidden");
+                      }}
+                    />
+                  ) : null}
+                  <ImageIcon className={`h-6 w-6 text-muted-foreground ${formData.thumbnail ? "hidden" : ""}`} />
+                </div>
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -153,9 +204,33 @@ export default function NewCoursePage() {
         <Card>
           <CardHeader>
             <CardTitle>Configuration</CardTitle>
+            <CardDescription>
+              Définissez le niveau, la catégorie et les conditions d'accès
+            </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid gap-4 md:grid-cols-2">
+              <div className="space-y-2">
+                <Label>Catégorie</Label>
+                <Select
+                  value={formData.category}
+                  onValueChange={(value) =>
+                    setFormData((prev) => ({ ...prev, category: value }))
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {CATEGORIES.map((cat) => (
+                      <SelectItem key={cat} value={cat}>
+                        {cat}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
               <div className="space-y-2">
                 <Label>Niveau</Label>
                 <Select
@@ -173,25 +248,28 @@ export default function NewCoursePage() {
                   </SelectContent>
                 </Select>
               </div>
+            </div>
 
-              <div className="space-y-2">
-                <Label>Plan requis</Label>
-                <Select
-                  value={formData.requiredPlan}
-                  onValueChange={(value) =>
-                    setFormData((prev) => ({ ...prev, requiredPlan: value }))
-                  }
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="FREE">Gratuit</SelectItem>
-                    <SelectItem value="BEGINNER">Débutant (9,99€/mois)</SelectItem>
-                    <SelectItem value="PRO">Pro (19,99€/mois)</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+            <div className="space-y-2">
+              <Label>Plan requis</Label>
+              <Select
+                value={formData.requiredPlan}
+                onValueChange={(value) =>
+                  setFormData((prev) => ({ ...prev, requiredPlan: value }))
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="FREE">Gratuit - Accessible à tous</SelectItem>
+                  <SelectItem value="BEGINNER">Débutant (9,99€/mois)</SelectItem>
+                  <SelectItem value="PRO">Pro (19,99€/mois)</SelectItem>
+                </SelectContent>
+              </Select>
+              <p className="text-xs text-muted-foreground">
+                Les utilisateurs devront avoir ce plan ou supérieur pour accéder au cours
+              </p>
             </div>
 
             <div className="flex items-center justify-between rounded-lg border p-4">

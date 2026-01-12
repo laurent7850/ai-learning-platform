@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/shared/providers";
 import { Toaster } from "@/components/ui/toaster";
+import { MobileCTA } from "@/components/shared/mobile-cta";
 import { siteConfig } from "@/lib/config";
 
 const inter = Inter({
@@ -87,6 +88,7 @@ export default function RootLayout({
         <Providers>
           {children}
           <Toaster />
+          <MobileCTA />
         </Providers>
       </body>
     </html>

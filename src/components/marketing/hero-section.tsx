@@ -1,125 +1,249 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
-import { ArrowRight, Play, Sparkles, Users, BookOpen, Award } from "lucide-react";
+import { motion, useReducedMotion } from "framer-motion";
+import { ArrowRight, Play, Sparkles, Users, BookOpen, Award, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { stats } from "@/lib/config";
+import { AnimatedGridBackground } from "@/components/ui/animated-grid-background";
+import { GradientText } from "@/components/ui/text-reveal";
+import { AIBrainVisual } from "@/components/ui/ai-brain-visual";
+
+const stats = [
+  { icon: BookOpen, label: "cours", value: "50+" },
+  { icon: Award, label: "satisfaction", value: "98%" },
+];
+
+// Avatars fictifs pour le social proof
+const avatars = [
+  { initials: "SM", color: "from-blue-500 to-cyan-500" },
+  { initials: "TD", color: "from-purple-500 to-pink-500" },
+  { initials: "ML", color: "from-amber-500 to-orange-500" },
+  { initials: "PB", color: "from-green-500 to-emerald-500" },
+  { initials: "CF", color: "from-rose-500 to-red-500" },
+];
 
 export function HeroSection() {
+  const shouldReduceMotion = useReducedMotion();
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: shouldReduceMotion ? 0 : 0.15,
+        delayChildren: 0.1,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: [0.25, 0.4, 0.25, 1] as const,
+      },
+    },
+  };
+
   return (
-    <section className="relative overflow-hidden py-20 md:py-32">
-      {/* Background gradient */}
-      <div className="absolute inset-0 gradient-hero" />
-      <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]" />
+    <section className="relative min-h-[90vh] flex items-center overflow-hidden py-20 md:py-32">
+      {/* Animated background */}
+      <AnimatedGridBackground />
 
-      <div className="container relative">
-        <div className="mx-auto max-w-4xl text-center">
-          {/* Badge */}
+      <div className="container relative z-10">
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
+          {/* Left column - Text content */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
+            className="text-center lg:text-left"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
           >
-            <span className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary">
-              <Sparkles className="h-4 w-4" />
-              Nouvelle formation : RAG & Chatbots IA
-            </span>
+            {/* Badge */}
+            <motion.div variants={itemVariants}>
+              <span className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-sm font-medium text-primary backdrop-blur-sm">
+                <motion.span
+                  animate={{ rotate: [0, 15, -15, 0] }}
+                  transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
+                >
+                  <Sparkles className="h-4 w-4" />
+                </motion.span>
+                Nouvelle formation : RAG & Chatbots IA
+              </span>
+            </motion.div>
+
+            {/* Headline */}
+            <motion.h1
+              variants={itemVariants}
+              className="mt-6 text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-6xl xl:text-7xl"
+            >
+              Maîtrisez{" "}
+              <GradientText className="font-extrabold">
+                l'Intelligence Artificielle
+              </GradientText>{" "}
+              et transformez votre quotidien
+            </motion.h1>
+
+            {/* Subheadline */}
+            <motion.p
+              variants={itemVariants}
+              className="mt-6 text-lg text-muted-foreground md:text-xl max-w-xl mx-auto lg:mx-0"
+            >
+              Des cours pratiques et accessibles pour apprendre à utiliser
+              ChatGPT, Claude et les outils IA au quotidien. Du débutant au
+              professionnel.
+            </motion.p>
+
+            {/* CTA Buttons */}
+            <motion.div
+              variants={itemVariants}
+              className="mt-10 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4"
+            >
+              {/* Primary CTA with glow effect */}
+              <motion.div
+                className="relative group"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                {/* Glow effect */}
+                <div className="absolute -inset-1 rounded-xl bg-gradient-to-r from-primary via-accent to-primary opacity-50 blur-lg group-hover:opacity-75 transition-opacity duration-300" />
+                <Button
+                  size="xl"
+                  className="relative bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-white shadow-xl"
+                  asChild
+                >
+                  <Link href="/inscription">
+                    Créer mon compte gratuit
+                    <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+                  </Link>
+                </Button>
+              </motion.div>
+
+              <Button
+                size="xl"
+                variant="outline"
+                className="backdrop-blur-sm border-primary/20 hover:border-primary/40 hover:bg-primary/5"
+                asChild
+              >
+                <Link href="/cours">
+                  <Play className="mr-2 h-5 w-5" />
+                  Découvrir les cours
+                </Link>
+              </Button>
+            </motion.div>
+
+            {/* Social proof with stacked avatars */}
+            <motion.div
+              variants={itemVariants}
+              className="mt-12 flex flex-wrap items-center justify-center lg:justify-start gap-6"
+            >
+              {/* Stacked avatars with learners count */}
+              <motion.div
+                className="flex items-center gap-3"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.8, duration: 0.5 }}
+              >
+                {/* Stacked avatars */}
+                <div className="flex -space-x-3">
+                  {avatars.map((avatar, index) => (
+                    <motion.div
+                      key={avatar.initials}
+                      className={`relative flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br ${avatar.color} text-white text-xs font-semibold ring-2 ring-background`}
+                      initial={{ opacity: 0, scale: 0 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: 0.9 + index * 0.1, duration: 0.3 }}
+                      style={{ zIndex: avatars.length - index }}
+                    >
+                      {avatar.initials}
+                    </motion.div>
+                  ))}
+                  {/* +more indicator */}
+                  <motion.div
+                    className="relative flex h-10 w-10 items-center justify-center rounded-full bg-muted text-xs font-semibold ring-2 ring-background"
+                    initial={{ opacity: 0, scale: 0 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 1.4, duration: 0.3 }}
+                  >
+                    +9k
+                  </motion.div>
+                </div>
+                <div>
+                  <span className="block font-bold text-foreground">10,000+</span>
+                  <span className="text-xs text-muted-foreground">apprenants actifs</span>
+                </div>
+              </motion.div>
+
+              {/* Rating */}
+              <motion.div
+                className="flex items-center gap-2"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 1, duration: 0.5 }}
+              >
+                <div className="flex -space-x-0.5">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />
+                  ))}
+                </div>
+                <span className="text-sm font-medium">4.9/5</span>
+                <span className="text-xs text-muted-foreground">(2,847 avis)</span>
+              </motion.div>
+
+              {/* Other stats */}
+              {stats.map((stat, index) => (
+                <motion.div
+                  key={stat.label}
+                  className="flex items-center gap-2 text-sm"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 1.1 + index * 0.1, duration: 0.5 }}
+                >
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+                    <stat.icon className="h-5 w-5 text-primary" />
+                  </div>
+                  <div>
+                    <span className="block font-bold text-foreground">{stat.value}</span>
+                    <span className="text-xs text-muted-foreground">{stat.label}</span>
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
           </motion.div>
 
-          {/* Headline */}
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="mt-6 text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl"
-          >
-            Maîtrisez{" "}
-            <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              l'Intelligence Artificielle
-            </span>{" "}
-            et transformez votre quotidien
-          </motion.h1>
-
-          {/* Subheadline */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="mt-6 text-lg text-muted-foreground md:text-xl max-w-2xl mx-auto"
-          >
-            Des cours pratiques et accessibles pour apprendre à utiliser
-            ChatGPT, Claude et les outils IA au quotidien. Du débutant au
-            professionnel.
-          </motion.p>
-
-          {/* CTA Buttons */}
+          {/* Right column - Visual */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4"
+            className="hidden lg:block"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
           >
-            <Button size="xl" variant="gradient" asChild>
-              <Link href="/inscription">
-                Commencer gratuitement
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Link>
-            </Button>
-            <Button size="xl" variant="outline" asChild>
-              <Link href="/cours">
-                <Play className="mr-2 h-5 w-5" />
-                Découvrir les cours
-              </Link>
-            </Button>
-          </motion.div>
-
-          {/* Social proof */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-            className="mt-12 flex flex-wrap items-center justify-center gap-8 text-sm text-muted-foreground"
-          >
-            <div className="flex items-center gap-2">
-              <Users className="h-5 w-5 text-primary" />
-              <span>
-                <strong className="text-foreground">10,000+</strong> apprenants
-              </span>
-            </div>
-            <div className="flex items-center gap-2">
-              <BookOpen className="h-5 w-5 text-primary" />
-              <span>
-                <strong className="text-foreground">50+</strong> cours
-              </span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Award className="h-5 w-5 text-primary" />
-              <span>
-                <strong className="text-foreground">98%</strong> satisfaction
-              </span>
-            </div>
+            <AIBrainVisual className="w-full max-w-lg mx-auto" />
           </motion.div>
         </div>
 
-        {/* Hero Image/Video Preview */}
+        {/* Scroll indicator */}
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-2"
+          initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.5 }}
-          className="mt-16 mx-auto max-w-5xl"
+          transition={{ delay: 1.5, duration: 0.5 }}
         >
-          <div className="relative rounded-xl border bg-background shadow-2xl overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent z-10" />
-            <div className="aspect-video bg-muted flex items-center justify-center">
-              <div className="relative z-20 flex flex-col items-center gap-4">
-                <button className="flex h-16 w-16 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg hover:scale-105 transition-transform">
-                  <Play className="h-6 w-6 ml-1" />
-                </button>
-                <span className="text-sm font-medium">Voir la présentation</span>
-              </div>
-            </div>
-          </div>
+          <span className="text-xs text-muted-foreground">Découvrir plus</span>
+          <motion.div
+            className="w-6 h-10 rounded-full border-2 border-muted-foreground/30 flex items-start justify-center p-2"
+            animate={{ opacity: [0.5, 1, 0.5] }}
+            transition={{ duration: 2, repeat: Infinity }}
+          >
+            <motion.div
+              className="w-1.5 h-1.5 rounded-full bg-primary"
+              animate={{ y: [0, 12, 0] }}
+              transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+            />
+          </motion.div>
         </motion.div>
       </div>
     </section>
