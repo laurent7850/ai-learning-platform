@@ -13,6 +13,7 @@ export const metadata: Metadata = {
 };
 
 // Demo blog posts (in production, would come from a CMS or database)
+// Images set to null to use gradient placeholders until real images are added
 const blogPosts = [
   {
     id: "1",
@@ -20,7 +21,7 @@ const blogPosts = [
     title: "Le guide complet du prompting ChatGPT en 2024",
     excerpt:
       "Maîtrisez l'art du prompting avec nos techniques avancées pour obtenir les meilleures réponses de ChatGPT.",
-    image: "/blog/prompting-guide.jpg",
+    image: null,
     category: "Tutoriel",
     author: "Marie Leroux",
     date: new Date("2024-01-15"),
@@ -32,7 +33,7 @@ const blogPosts = [
     title: "Les 10 tendances de l'IA générative à suivre en 2024",
     excerpt:
       "De GPT-5 à Gemini, découvrez les innovations qui vont transformer notre façon de travailler cette année.",
-    image: "/blog/trends-2024.jpg",
+    image: null,
     category: "Actualités",
     author: "Thomas Durand",
     date: new Date("2024-01-10"),
@@ -44,7 +45,7 @@ const blogPosts = [
     title: "Comment automatiser vos tâches répétitives avec l'IA",
     excerpt:
       "Guide pratique pour identifier et automatiser les tâches chronophages de votre quotidien professionnel.",
-    image: "/blog/automation.jpg",
+    image: null,
     category: "Productivité",
     author: "Sophie Martin",
     date: new Date("2024-01-05"),
@@ -56,7 +57,7 @@ const blogPosts = [
     title: "ChatGPT vs Claude : quel assistant IA choisir ?",
     excerpt:
       "Comparatif détaillé des deux principaux assistants IA pour vous aider à faire le bon choix selon vos besoins.",
-    image: "/blog/comparison.jpg",
+    image: null,
     category: "Comparatif",
     author: "Pierre Bernard",
     date: new Date("2024-01-02"),
@@ -68,7 +69,7 @@ const blogPosts = [
     title: "Débuter avec Midjourney : créez vos premières images IA",
     excerpt:
       "Tutoriel pas à pas pour générer des images impressionnantes avec Midjourney, même sans expérience.",
-    image: "/blog/midjourney.jpg",
+    image: null,
     category: "Tutoriel",
     author: "Marie Leroux",
     date: new Date("2023-12-28"),
@@ -80,7 +81,7 @@ const blogPosts = [
     title: "Éthique et IA : les bonnes pratiques à adopter",
     excerpt:
       "Les principes essentiels pour utiliser l'IA de manière responsable et éthique dans votre travail.",
-    image: "/blog/ethics.jpg",
+    image: null,
     category: "Éthique",
     author: "Thomas Durand",
     date: new Date("2023-12-20"),
