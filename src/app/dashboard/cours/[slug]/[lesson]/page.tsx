@@ -11,6 +11,7 @@ import {
   Play,
   Lock,
   BookOpen,
+  Menu,
 } from "lucide-react";
 import { getAuthSession } from "@/lib/auth";
 import { db } from "@/lib/db";
@@ -18,6 +19,13 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { cn, formatDuration, calculateProgress } from "@/lib/utils";
 import { LessonContent } from "@/components/courses/lesson-content";
 import { MarkCompleteButton } from "@/components/courses/mark-complete-button";
@@ -125,6 +133,111 @@ async function getCourseAndLesson(
   };
 }
 
+// Shared sidebar content component
+function CourseSidebarContent({
+  course,
+  slug,
+  lessonSlug,
+  completedLessonIds,
+  enrollment,
+  progressPercentage,
+}: {
+  course: any;
+  slug: string;
+  lessonSlug: string;
+  completedLessonIds: Set<string>;
+  enrollment: any;
+  progressPercentage: number;
+}) {
+  return (
+    <>
+      {/* Course Header */}
+      <div className="p-4 border-b">
+        <Link
+          href={`/cours/${slug}`}
+          className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-3"
+        >
+          <ChevronLeft className="h-4 w-4" />
+          Retour au cours
+        </Link>
+        <h2 className="font-semibold line-clamp-2">{course.title}</h2>
+        <div className="mt-3 space-y-1">
+          <div className="flex justify-between text-xs text-muted-foreground">
+            <span>Progression</span>
+            <span>{progressPercentage}%</span>
+          </div>
+          <Progress value={progressPercentage} className="h-2" />
+        </div>
+      </div>
+
+      {/* Chapters List */}
+      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+        {course.chapters.map((chapter: any) => (
+          <div key={chapter.id}>
+            <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
+              {chapter.title}
+            </h3>
+            <ul className="space-y-1">
+              {chapter.lessons.map((lesson: any) => {
+                const isActive = lesson.slug === lessonSlug;
+                const isLessonCompleted = completedLessonIds.has(lesson.id);
+                const isAccessible = enrollment || lesson.isFree;
+
+                return (
+                  <li key={lesson.id}>
+                    {isAccessible ? (
+                      <Link
+                        href={`/dashboard/cours/${slug}/${lesson.slug}`}
+                        className={cn(
+                          "flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors",
+                          isActive
+                            ? "bg-primary text-primary-foreground"
+                            : "hover:bg-muted"
+                        )}
+                      >
+                        {isLessonCompleted ? (
+                          <CheckCircle2
+                            className={cn(
+                              "h-4 w-4 shrink-0",
+                              isActive
+                                ? "text-primary-foreground"
+                                : "text-green-500"
+                            )}
+                          />
+                        ) : (
+                          <Circle
+                            className={cn(
+                              "h-4 w-4 shrink-0",
+                              isActive
+                                ? "text-primary-foreground"
+                                : "text-muted-foreground"
+                            )}
+                          />
+                        )}
+                        <span className="line-clamp-1">{lesson.title}</span>
+                        {lesson.isFree && !isActive && (
+                          <Badge variant="outline" className="ml-auto text-xs">
+                            Gratuit
+                          </Badge>
+                        )}
+                      </Link>
+                    ) : (
+                      <div className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-muted-foreground opacity-60">
+                        <Lock className="h-4 w-4 shrink-0" />
+                        <span className="line-clamp-1">{lesson.title}</span>
+                      </div>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </>
+  );
+}
+
 async function LessonPageContent({ params }: LessonPageProps) {
   const { slug, lesson: lessonSlug } = await params;
 
@@ -143,7 +256,6 @@ async function LessonPageContent({ params }: LessonPageProps) {
     course,
     currentLesson,
     currentChapter,
-    allLessons,
     previousLesson,
     nextLesson,
     completedLessonIds,
@@ -158,125 +270,72 @@ async function LessonPageContent({ params }: LessonPageProps) {
   }
 
   return (
-    <div className="flex h-[calc(100vh-4rem)]">
-      {/* Sidebar - Course Navigation */}
+    <div className="flex min-h-[calc(100vh-4rem)] lg:h-[calc(100vh-4rem)]">
+      {/* Sidebar - Course Navigation (Desktop) */}
       <aside className="hidden lg:flex flex-col w-80 border-r bg-card overflow-hidden">
-        {/* Course Header */}
-        <div className="p-4 border-b">
-          <Link
-            href={`/cours/${slug}`}
-            className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-3"
-          >
-            <ChevronLeft className="h-4 w-4" />
-            Retour au cours
-          </Link>
-          <h2 className="font-semibold line-clamp-2">{course.title}</h2>
-          <div className="mt-3 space-y-1">
-            <div className="flex justify-between text-xs text-muted-foreground">
-              <span>Progression</span>
-              <span>{progressPercentage}%</span>
-            </div>
-            <Progress value={progressPercentage} className="h-2" />
-          </div>
-        </div>
-
-        {/* Chapters List */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-4">
-          {course.chapters.map((chapter) => (
-            <div key={chapter.id}>
-              <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
-                {chapter.title}
-              </h3>
-              <ul className="space-y-1">
-                {chapter.lessons.map((lesson) => {
-                  const isActive = lesson.slug === lessonSlug;
-                  const isLessonCompleted = completedLessonIds.has(lesson.id);
-                  const isAccessible = enrollment || lesson.isFree;
-
-                  return (
-                    <li key={lesson.id}>
-                      {isAccessible ? (
-                        <Link
-                          href={`/dashboard/cours/${slug}/${lesson.slug}`}
-                          className={cn(
-                            "flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors",
-                            isActive
-                              ? "bg-primary text-primary-foreground"
-                              : "hover:bg-muted"
-                          )}
-                        >
-                          {isLessonCompleted ? (
-                            <CheckCircle2
-                              className={cn(
-                                "h-4 w-4 shrink-0",
-                                isActive
-                                  ? "text-primary-foreground"
-                                  : "text-green-500"
-                              )}
-                            />
-                          ) : (
-                            <Circle
-                              className={cn(
-                                "h-4 w-4 shrink-0",
-                                isActive
-                                  ? "text-primary-foreground"
-                                  : "text-muted-foreground"
-                              )}
-                            />
-                          )}
-                          <span className="line-clamp-1">{lesson.title}</span>
-                          {lesson.isFree && !isActive && (
-                            <Badge variant="outline" className="ml-auto text-xs">
-                              Gratuit
-                            </Badge>
-                          )}
-                        </Link>
-                      ) : (
-                        <div className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-muted-foreground opacity-60">
-                          <Lock className="h-4 w-4 shrink-0" />
-                          <span className="line-clamp-1">{lesson.title}</span>
-                        </div>
-                      )}
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-          ))}
-        </div>
+        <CourseSidebarContent
+          course={course}
+          slug={slug}
+          lessonSlug={lessonSlug}
+          completedLessonIds={completedLessonIds}
+          enrollment={enrollment}
+          progressPercentage={progressPercentage}
+        />
       </aside>
 
       {/* Main Content */}
       <main className="flex-1 flex flex-col overflow-hidden">
         {/* Top Bar */}
-        <div className="flex items-center justify-between p-4 border-b bg-background">
-          <div className="flex items-center gap-4">
-            <Link
-              href={`/cours/${slug}`}
-              className="lg:hidden flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
-            >
-              <ChevronLeft className="h-4 w-4" />
-            </Link>
-            <div>
-              <p className="text-xs text-muted-foreground">
+        <div className="flex items-center justify-between p-3 sm:p-4 border-b bg-background">
+          <div className="flex items-center gap-2 sm:gap-4 min-w-0 flex-1">
+            {/* Mobile menu button */}
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon" className="lg:hidden shrink-0">
+                  <Menu className="h-5 w-5" />
+                  <span className="sr-only">Menu du cours</span>
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="left" className="w-80 p-0">
+                <SheetHeader className="sr-only">
+                  <SheetTitle>Navigation du cours</SheetTitle>
+                </SheetHeader>
+                <div className="flex flex-col h-full">
+                  <CourseSidebarContent
+                    course={course}
+                    slug={slug}
+                    lessonSlug={lessonSlug}
+                    completedLessonIds={completedLessonIds}
+                    enrollment={enrollment}
+                    progressPercentage={progressPercentage}
+                  />
+                </div>
+              </SheetContent>
+            </Sheet>
+
+            <div className="min-w-0 flex-1">
+              <p className="text-xs text-muted-foreground truncate">
                 {currentChapter?.title}
               </p>
-              <h1 className="font-semibold">{currentLesson.title}</h1>
+              <h1 className="font-semibold text-sm sm:text-base truncate">
+                {currentLesson.title}
+              </h1>
             </div>
           </div>
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <div className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground shrink-0">
             <BookOpen className="h-4 w-4" />
-            {formatDuration(currentLesson.duration)}
+            <span className="hidden sm:inline">{formatDuration(currentLesson.duration)}</span>
+            <span className="sm:hidden">{currentLesson.duration}min</span>
           </div>
         </div>
 
         {/* Lesson Content */}
         <div className="flex-1 overflow-y-auto">
-          <div className="max-w-4xl mx-auto p-6 md:p-8">
+          <div className="max-w-4xl mx-auto p-4 sm:p-6 md:p-8">
             {/* Video (if available) */}
             {currentLesson.videoUrl && (
-              <div className="aspect-video bg-black rounded-xl mb-8 flex items-center justify-center">
-                <Play className="h-16 w-16 text-white/80" />
+              <div className="aspect-video bg-black rounded-xl mb-6 sm:mb-8 flex items-center justify-center">
+                <Play className="h-12 w-12 sm:h-16 sm:w-16 text-white/80" />
               </div>
             )}
 
@@ -284,7 +343,7 @@ async function LessonPageContent({ params }: LessonPageProps) {
             <LessonContent content={currentLesson.content} />
 
             {/* Mark Complete */}
-            <div className="mt-8 pt-8 border-t">
+            <div className="mt-6 sm:mt-8 pt-6 sm:pt-8 border-t">
               <MarkCompleteButton
                 lessonId={currentLesson.id}
                 isCompleted={isCompleted}
@@ -299,13 +358,13 @@ async function LessonPageContent({ params }: LessonPageProps) {
         </div>
 
         {/* Navigation Bar */}
-        <div className="flex items-center justify-between p-4 border-t bg-background">
+        <div className="flex items-center justify-between p-3 sm:p-4 border-t bg-background">
           {previousLesson ? (
-            <Button variant="outline" asChild>
+            <Button variant="outline" size="sm" className="sm:size-default" asChild>
               <Link
                 href={`/dashboard/cours/${slug}/${previousLesson.lesson.slug}`}
               >
-                <ChevronLeft className="h-4 w-4 mr-2" />
+                <ChevronLeft className="h-4 w-4 sm:mr-2" />
                 <span className="hidden sm:inline">Précédent</span>
               </Link>
             </Button>
@@ -313,16 +372,25 @@ async function LessonPageContent({ params }: LessonPageProps) {
             <div />
           )}
 
+          {/* Mobile progress indicator */}
+          <div className="lg:hidden flex items-center gap-2">
+            <span className="text-xs text-muted-foreground">{progressPercentage}%</span>
+            <Progress value={progressPercentage} className="h-2 w-16" />
+          </div>
+
           {nextLesson ? (
-            <Button asChild>
+            <Button size="sm" className="sm:size-default" asChild>
               <Link href={`/dashboard/cours/${slug}/${nextLesson.lesson.slug}`}>
                 <span className="hidden sm:inline">Suivant</span>
-                <ChevronRight className="h-4 w-4 ml-2" />
+                <ChevronRight className="h-4 w-4 sm:ml-2" />
               </Link>
             </Button>
           ) : (
-            <Button asChild>
-              <Link href="/dashboard/mes-cours">Terminer le cours</Link>
+            <Button size="sm" className="sm:size-default" asChild>
+              <Link href="/dashboard/mes-cours">
+                <span className="hidden sm:inline">Terminer</span>
+                <span className="sm:hidden">Fin</span>
+              </Link>
             </Button>
           )}
         </div>
@@ -335,7 +403,7 @@ export default function LessonPage({ params }: LessonPageProps) {
   return (
     <Suspense
       fallback={
-        <div className="flex h-[calc(100vh-4rem)]">
+        <div className="flex min-h-[calc(100vh-4rem)] lg:h-[calc(100vh-4rem)]">
           <aside className="hidden lg:block w-80 border-r bg-card p-4">
             <Skeleton className="h-8 w-full mb-4" />
             <Skeleton className="h-4 w-full mb-2" />
@@ -344,7 +412,7 @@ export default function LessonPage({ params }: LessonPageProps) {
               <Skeleton key={i} className="h-10 w-full mb-2" />
             ))}
           </aside>
-          <main className="flex-1 p-8">
+          <main className="flex-1 p-4 sm:p-8">
             <Skeleton className="h-8 w-64 mb-2" />
             <Skeleton className="h-4 w-32 mb-8" />
             <Skeleton className="aspect-video w-full mb-8" />
