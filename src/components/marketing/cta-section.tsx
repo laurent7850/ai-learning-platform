@@ -12,6 +12,18 @@ const benefits = [
   { icon: Clock, text: "Support 24/7" },
 ];
 
+// Positions fixes pour éviter les erreurs d'hydratation
+const floatingParticles = [
+  { left: 10, top: 15, duration: 4.5, delay: 0.3 },
+  { left: 25, top: 70, duration: 5.2, delay: 1.2 },
+  { left: 45, top: 25, duration: 4.8, delay: 2.1 },
+  { left: 60, top: 80, duration: 5.5, delay: 0.6 },
+  { left: 75, top: 35, duration: 4.3, delay: 1.8 },
+  { left: 85, top: 60, duration: 5.0, delay: 2.7 },
+  { left: 35, top: 90, duration: 4.7, delay: 0.9 },
+  { left: 90, top: 20, duration: 5.3, delay: 1.5 },
+];
+
 export function CTASection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
@@ -56,22 +68,22 @@ export function CTASection() {
           />
 
           {/* Subtle floating particles */}
-          {[...Array(8)].map((_, i) => (
+          {floatingParticles.map((particle, i) => (
             <motion.div
               key={i}
               className="absolute w-1 h-1 rounded-full bg-white/20"
               style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
+                left: `${particle.left}%`,
+                top: `${particle.top}%`,
               }}
               animate={{
                 y: [0, -20, 0],
                 opacity: [0, 0.5, 0],
               }}
               transition={{
-                duration: 4 + Math.random() * 2,
+                duration: particle.duration,
                 repeat: Infinity,
-                delay: Math.random() * 3,
+                delay: particle.delay,
                 ease: "easeInOut",
               }}
             />

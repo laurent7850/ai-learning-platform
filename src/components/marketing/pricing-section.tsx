@@ -125,7 +125,7 @@ export function PricingSection() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className={`group relative ${plan.popular ? "md:-mt-4 md:mb-4" : ""}`}
+                className="group relative"
               >
                 {/* Popular plan subtle border */}
                 {plan.popular && (

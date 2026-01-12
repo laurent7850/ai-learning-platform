@@ -1,11 +1,22 @@
 "use client";
 
-import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 
 interface AnimatedGridBackgroundProps {
   className?: string;
 }
+
+// Positions fixes pour éviter les erreurs d'hydratation
+const particles = [
+  { left: 5, top: 10, duration: 4.2, delay: 0.5 },
+  { left: 15, top: 30, duration: 5.1, delay: 1.2 },
+  { left: 25, top: 60, duration: 4.8, delay: 2.0 },
+  { left: 40, top: 20, duration: 5.5, delay: 0.8 },
+  { left: 55, top: 45, duration: 4.3, delay: 3.1 },
+  { left: 70, top: 15, duration: 5.0, delay: 1.5 },
+  { left: 80, top: 55, duration: 4.6, delay: 2.5 },
+  { left: 90, top: 35, duration: 5.2, delay: 0.3 },
+];
 
 export function AnimatedGridBackground({ className }: AnimatedGridBackgroundProps) {
   return (
@@ -82,22 +93,22 @@ export function AnimatedGridBackground({ className }: AnimatedGridBackgroundProp
       </svg>
 
       {/* Subtle floating particles */}
-      {[...Array(12)].map((_, i) => (
+      {particles.map((particle, i) => (
         <motion.div
           key={i}
           className="absolute h-1 w-1 rounded-full bg-primary/20"
           style={{
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
+            left: `${particle.left}%`,
+            top: `${particle.top}%`,
           }}
           animate={{
             y: [0, -20, 0],
             opacity: [0, 0.6, 0],
           }}
           transition={{
-            duration: 4 + Math.random() * 2,
+            duration: particle.duration,
             repeat: Infinity,
-            delay: Math.random() * 5,
+            delay: particle.delay,
             ease: "easeInOut",
           }}
         />

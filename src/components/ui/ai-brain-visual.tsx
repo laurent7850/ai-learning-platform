@@ -2,6 +2,18 @@
 
 import { motion } from "framer-motion";
 
+// Positions fixes pour éviter les erreurs d'hydratation
+const floatingParticles = [
+  { left: 30, top: 35, duration: 4.5, delay: 0.2 },
+  { left: 55, top: 28, duration: 5.2, delay: 1.1 },
+  { left: 42, top: 65, duration: 4.8, delay: 2.4 },
+  { left: 68, top: 45, duration: 5.6, delay: 0.7 },
+  { left: 35, top: 55, duration: 4.3, delay: 1.8 },
+  { left: 60, top: 70, duration: 5.0, delay: 2.9 },
+  { left: 48, top: 32, duration: 4.9, delay: 0.5 },
+  { left: 72, top: 58, duration: 5.4, delay: 1.5 },
+];
+
 export function AIBrainVisual({ className }: { className?: string }) {
   return (
     <div className={`relative ${className}`}>
@@ -159,22 +171,22 @@ export function AIBrainVisual({ className }: { className?: string }) {
         </motion.div>
 
         {/* Subtle floating data particles */}
-        {[...Array(8)].map((_, i) => (
+        {floatingParticles.map((particle, i) => (
           <motion.div
             key={i}
             className="absolute w-1 h-1 rounded-full bg-primary/40"
             style={{
-              left: `${25 + Math.random() * 50}%`,
-              top: `${25 + Math.random() * 50}%`,
+              left: `${particle.left}%`,
+              top: `${particle.top}%`,
             }}
             animate={{
               y: [0, -15, 0],
               opacity: [0, 0.6, 0],
             }}
             transition={{
-              duration: 4 + Math.random() * 2,
+              duration: particle.duration,
               repeat: Infinity,
-              delay: Math.random() * 3,
+              delay: particle.delay,
               ease: "easeInOut",
             }}
           />
