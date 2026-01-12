@@ -14,6 +14,26 @@ const floatingParticles = [
   { left: 72, top: 58, duration: 5.4, delay: 1.5 },
 ];
 
+// Positions pré-calculées pour les points pulsants (rayon 70px, 6 points)
+const pulsingDots = [
+  { x: 70, y: 0 },      // 0°
+  { x: 35, y: 60.62 },  // 60°
+  { x: -35, y: 60.62 }, // 120°
+  { x: -70, y: 0 },     // 180°
+  { x: -35, y: -60.62 }, // 240°
+  { x: 35, y: -60.62 }, // 300°
+];
+
+// Positions pré-calculées pour les lignes (rayon 28px, 6 lignes)
+const connectingLines = [
+  { x: 28, y: 0 },      // 0°
+  { x: 14, y: 24.25 },  // 60°
+  { x: -14, y: 24.25 }, // 120°
+  { x: -28, y: 0 },     // 180°
+  { x: -14, y: -24.25 }, // 240°
+  { x: 14, y: -24.25 }, // 300°
+];
+
 export function AIBrainVisual({ className }: { className?: string }) {
   return (
     <div className={`relative ${className}`}>
@@ -111,61 +131,51 @@ export function AIBrainVisual({ className }: { className?: string }) {
             </motion.svg>
 
             {/* Subtle pulsing dots around the brain */}
-            {[...Array(6)].map((_, i) => {
-              const angle = (i * 360) / 6;
-              const x = Math.cos((angle * Math.PI) / 180) * 70;
-              const y = Math.sin((angle * Math.PI) / 180) * 70;
-              return (
-                <motion.div
-                  key={i}
-                  className="absolute w-1.5 h-1.5 rounded-full bg-primary/70"
-                  style={{
-                    left: `calc(50% + ${x}px - 3px)`,
-                    top: `calc(50% + ${y}px - 3px)`,
-                  }}
-                  animate={{
-                    scale: [1, 1.3, 1],
-                    opacity: [0.4, 0.8, 0.4],
-                  }}
-                  transition={{
-                    duration: 3,
-                    repeat: Infinity,
-                    delay: i * 0.3,
-                    ease: "easeInOut",
-                  }}
-                />
-              );
-            })}
+            {pulsingDots.map((dot, i) => (
+              <motion.div
+                key={i}
+                className="absolute w-1.5 h-1.5 rounded-full bg-primary/70"
+                style={{
+                  left: `calc(50% + ${dot.x}px - 3px)`,
+                  top: `calc(50% + ${dot.y}px - 3px)`,
+                }}
+                animate={{
+                  scale: [1, 1.3, 1],
+                  opacity: [0.4, 0.8, 0.4],
+                }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  delay: i * 0.3,
+                  ease: "easeInOut",
+                }}
+              />
+            ))}
 
             {/* Connecting lines */}
             <svg
               className="absolute inset-0 w-full h-full"
               style={{ transform: "scale(2.5)" }}
             >
-              {[...Array(6)].map((_, i) => {
-                const angle = (i * 360) / 6;
-                const x = Math.cos((angle * Math.PI) / 180) * 28;
-                const y = Math.sin((angle * Math.PI) / 180) * 28;
-                return (
-                  <motion.line
-                    key={i}
-                    x1="50%"
-                    y1="50%"
-                    x2={`calc(50% + ${x}px)`}
-                    y2={`calc(50% + ${y}px)`}
-                    stroke="hsl(var(--primary))"
-                    strokeWidth="0.5"
-                    strokeOpacity="0.2"
-                    initial={{ pathLength: 0 }}
-                    animate={{ pathLength: 1 }}
-                    transition={{
-                      duration: 1.5,
-                      delay: 0.5 + i * 0.15,
-                      ease: "easeOut",
-                    }}
-                  />
-                );
-              })}
+              {connectingLines.map((line, i) => (
+                <motion.line
+                  key={i}
+                  x1="50%"
+                  y1="50%"
+                  x2={`calc(50% + ${line.x}px)`}
+                  y2={`calc(50% + ${line.y}px)`}
+                  stroke="hsl(var(--primary))"
+                  strokeWidth="0.5"
+                  strokeOpacity="0.2"
+                  initial={{ pathLength: 0 }}
+                  animate={{ pathLength: 1 }}
+                  transition={{
+                    duration: 1.5,
+                    delay: 0.5 + i * 0.15,
+                    ease: "easeOut",
+                  }}
+                />
+              ))}
             </svg>
           </div>
         </motion.div>

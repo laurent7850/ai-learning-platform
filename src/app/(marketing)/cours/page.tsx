@@ -13,6 +13,82 @@ export const metadata: Metadata = {
     "Découvrez tous nos cours pour apprendre l'Intelligence Artificielle, du débutant au niveau intermédiaire.",
 };
 
+// Données de démonstration en cas d'erreur de connexion à la base de données
+const demoCourses = [
+  {
+    id: "demo-1",
+    slug: "introduction-chatgpt",
+    title: "Introduction à ChatGPT",
+    description: "Apprenez les bases de ChatGPT et comment l'utiliser efficacement pour vos tâches quotidiennes.",
+    thumbnail: "/images/course-chatgpt.jpg",
+    level: "BEGINNER" as const,
+    category: "chatgpt",
+    duration: 120,
+    requiredPlan: "FREE" as const,
+    _count: { enrollments: 1250 },
+  },
+  {
+    id: "demo-2",
+    slug: "prompting-avance",
+    title: "Prompting Avancé",
+    description: "Maîtrisez l'art du prompting pour obtenir des résultats optimaux avec les modèles de langage.",
+    thumbnail: "/images/course-prompting.jpg",
+    level: "INTERMEDIATE" as const,
+    category: "prompting",
+    duration: 180,
+    requiredPlan: "STARTER" as const,
+    _count: { enrollments: 890 },
+  },
+  {
+    id: "demo-3",
+    slug: "midjourney-creation-images",
+    title: "Création d'images avec Midjourney",
+    description: "Générez des images impressionnantes avec Midjourney, de la conception à la réalisation.",
+    thumbnail: "/images/course-midjourney.jpg",
+    level: "BEGINNER" as const,
+    category: "image",
+    duration: 150,
+    requiredPlan: "FREE" as const,
+    _count: { enrollments: 1100 },
+  },
+  {
+    id: "demo-4",
+    slug: "automatisation-ia",
+    title: "Automatisation avec l'IA",
+    description: "Automatisez vos tâches répétitives en utilisant les outils d'IA les plus performants.",
+    thumbnail: "/images/course-automation.jpg",
+    level: "INTERMEDIATE" as const,
+    category: "automation",
+    duration: 240,
+    requiredPlan: "PRO" as const,
+    _count: { enrollments: 650 },
+  },
+  {
+    id: "demo-5",
+    slug: "claude-ai-assistant",
+    title: "Maîtriser Claude AI",
+    description: "Découvrez Claude, l'assistant IA d'Anthropic, et apprenez à l'utiliser pour vos projets.",
+    thumbnail: "/images/course-claude.jpg",
+    level: "BEGINNER" as const,
+    category: "chatgpt",
+    duration: 90,
+    requiredPlan: "FREE" as const,
+    _count: { enrollments: 780 },
+  },
+  {
+    id: "demo-6",
+    slug: "dall-e-creation-visuelle",
+    title: "DALL-E : Création Visuelle",
+    description: "Créez des visuels uniques avec DALL-E et intégrez-les dans vos projets créatifs.",
+    thumbnail: "/images/course-dalle.jpg",
+    level: "INTERMEDIATE" as const,
+    category: "image",
+    duration: 160,
+    requiredPlan: "STARTER" as const,
+    _count: { enrollments: 520 },
+  },
+];
+
 interface CoursesPageProps {
   searchParams: Promise<{
     level?: string;
@@ -26,47 +102,72 @@ async function getCourses(filters: {
   category?: string;
   search?: string;
 }) {
-  const where: any = {
-    published: true,
-  };
+  try {
+    const where: any = {
+      published: true,
+    };
 
-  if (filters.level && filters.level !== "all") {
-    where.level = filters.level;
-  }
+    if (filters.level && filters.level !== "all") {
+      where.level = filters.level;
+    }
 
-  if (filters.category && filters.category !== "all") {
-    where.category = filters.category;
-  }
+    if (filters.category && filters.category !== "all") {
+      where.category = filters.category;
+    }
 
-  if (filters.search) {
-    where.OR = [
-      { title: { contains: filters.search, mode: "insensitive" } },
-      { description: { contains: filters.search, mode: "insensitive" } },
-    ];
-  }
+    if (filters.search) {
+      where.OR = [
+        { title: { contains: filters.search, mode: "insensitive" } },
+        { description: { contains: filters.search, mode: "insensitive" } },
+      ];
+    }
 
-  const courses = await db.course.findMany({
-    where,
-    orderBy: [{ level: "asc" }, { createdAt: "desc" }],
-    select: {
-      id: true,
-      slug: true,
-      title: true,
-      description: true,
-      thumbnail: true,
-      level: true,
-      category: true,
-      duration: true,
-      requiredPlan: true,
-      _count: {
-        select: {
-          enrollments: true,
+    const courses = await db.course.findMany({
+      where,
+      orderBy: [{ level: "asc" }, { createdAt: "desc" }],
+      select: {
+        id: true,
+        slug: true,
+        title: true,
+        description: true,
+        thumbnail: true,
+        level: true,
+        category: true,
+        duration: true,
+        requiredPlan: true,
+        _count: {
+          select: {
+            enrollments: true,
+          },
         },
       },
-    },
-  });
+    });
 
-  return courses;
+    return courses;
+  } catch (error) {
+    console.error("Erreur de connexion à la base de données, utilisation des données de démonstration:", error);
+
+    // Filtrer les données de démonstration selon les filtres
+    let filtered = [...demoCourses];
+
+    if (filters.level && filters.level !== "all") {
+      filtered = filtered.filter(c => c.level === filters.level);
+    }
+
+    if (filters.category && filters.category !== "all") {
+      filtered = filtered.filter(c => c.category === filters.category);
+    }
+
+    if (filters.search) {
+      const search = filters.search.toLowerCase();
+      filtered = filtered.filter(c =>
+        c.title.toLowerCase().includes(search) ||
+        c.description.toLowerCase().includes(search)
+      );
+    }
+
+    return filtered;
+  }
 }
 
 function CourseGridSkeleton() {

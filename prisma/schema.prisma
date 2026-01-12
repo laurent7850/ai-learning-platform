@@ -15,15 +15,14 @@ model Account {
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
+  refresh_token     String?
+  access_token      String?
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? @db.Text
+  id_token          String?
   session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
   @@index([userId])
@@ -40,20 +39,20 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String        @id @default(cuid())
   name          String?
-  email         String?   @unique
+  email         String?       @unique
   emailVerified DateTime?
   image         String?
-  role          Role      @default(USER)
+  role          Role          @default(USER)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
   accounts      Account[]
-  sessions      Session[]
-  subscription  Subscription?
+  certificates  Certificate[]
   enrollments   Enrollment[]
   progress      Progress[]
-  certificates  Certificate[]
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  sessions      Session[]
+  subscription  Subscription?
 }
 
 model VerificationToken {
@@ -64,15 +63,9 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-enum Role {
-  USER
-  ADMIN
-}
-
 model Subscription {
   id                   String             @id @default(cuid())
   userId               String             @unique
-  user                 User               @relation(fields: [userId], references: [id], onDelete: Cascade)
   stripeCustomerId     String             @unique
   stripePriceId        String
   stripeSubscriptionId String             @unique
@@ -82,9 +75,105 @@ model Subscription {
   currentPeriodEnd     DateTime
   createdAt            DateTime           @default(now())
   updatedAt            DateTime           @updatedAt
+  user                 User               @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([stripeCustomerId])
   @@index([stripeSubscriptionId])
+}
+
+model Course {
+  id           String       @id @default(cuid())
+  slug         String       @unique
+  title        String
+  description  String
+  thumbnail    String
+  level        Level
+  category     String
+  duration     Int
+  published    Boolean      @default(false)
+  requiredPlan Plan         @default(FREE)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  chapters     Chapter[]
+  enrollments  Enrollment[]
+
+  @@index([slug])
+  @@index([level])
+  @@index([category])
+  @@index([published])
+}
+
+model Chapter {
+  id       String   @id @default(cuid())
+  courseId String
+  title    String
+  order    Int
+  course   Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  lessons  Lesson[]
+
+  @@index([courseId])
+}
+
+model Lesson {
+  id        String     @id @default(cuid())
+  chapterId String
+  title     String
+  slug      String
+  content   String
+  videoUrl  String?
+  duration  Int
+  order     Int
+  isFree    Boolean    @default(false)
+  chapter   Chapter    @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  progress  Progress[]
+
+  @@index([chapterId])
+  @@index([slug])
+}
+
+model Enrollment {
+  id        String   @id @default(cuid())
+  userId    String
+  courseId  String
+  createdAt DateTime @default(now())
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, courseId])
+  @@index([userId])
+  @@index([courseId])
+}
+
+model Progress {
+  id          String    @id @default(cuid())
+  userId      String
+  lessonId    String
+  completed   Boolean   @default(false)
+  completedAt DateTime?
+  lesson      Lesson    @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, lessonId])
+  @@index([userId])
+  @@index([lessonId])
+}
+
+model Certificate {
+  id       String   @id @default(cuid())
+  uniqueId String   @unique @default(cuid())
+  userId   String
+  courseId String
+  issuedAt DateTime @default(now())
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, courseId])
+  @@index([userId])
+  @@index([uniqueId])
+}
+
+enum Role {
+  USER
+  ADMIN
 }
 
 enum Plan {
@@ -100,97 +189,7 @@ enum SubscriptionStatus {
   TRIALING
 }
 
-model Course {
-  id           String       @id @default(cuid())
-  slug         String       @unique
-  title        String
-  description  String       @db.Text
-  thumbnail    String
-  level        Level
-  category     String
-  duration     Int          // en minutes
-  published    Boolean      @default(false)
-  requiredPlan Plan         @default(FREE)
-  chapters     Chapter[]
-  enrollments  Enrollment[]
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @updatedAt
-
-  @@index([slug])
-  @@index([level])
-  @@index([category])
-  @@index([published])
-}
-
 enum Level {
   BEGINNER
   INTERMEDIATE
-}
-
-model Chapter {
-  id       String   @id @default(cuid())
-  courseId String
-  course   Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  title    String
-  order    Int
-  lessons  Lesson[]
-
-  @@index([courseId])
-}
-
-model Lesson {
-  id        String     @id @default(cuid())
-  chapterId String
-  chapter   Chapter    @relation(fields: [chapterId], references: [id], onDelete: Cascade)
-  title     String
-  slug      String
-  content   String     @db.Text
-  videoUrl  String?
-  duration  Int        // en minutes
-  order     Int
-  isFree    Boolean    @default(false)
-  progress  Progress[]
-
-  @@index([chapterId])
-  @@index([slug])
-}
-
-model Enrollment {
-  id        String   @id @default(cuid())
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  courseId  String
-  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  createdAt DateTime @default(now())
-
-  @@unique([userId, courseId])
-  @@index([userId])
-  @@index([courseId])
-}
-
-model Progress {
-  id          String    @id @default(cuid())
-  userId      String
-  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  lessonId    String
-  lesson      Lesson    @relation(fields: [lessonId], references: [id], onDelete: Cascade)
-  completed   Boolean   @default(false)
-  completedAt DateTime?
-
-  @@unique([userId, lessonId])
-  @@index([userId])
-  @@index([lessonId])
-}
-
-model Certificate {
-  id       String   @id @default(cuid())
-  uniqueId String   @unique @default(cuid())
-  userId   String
-  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  courseId String
-  issuedAt DateTime @default(now())
-
-  @@unique([userId, courseId])
-  @@index([userId])
-  @@index([uniqueId])
 }
