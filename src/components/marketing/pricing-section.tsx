@@ -3,9 +3,8 @@
 import { useState, useRef } from "react";
 import Link from "next/link";
 import { motion, useInView, AnimatePresence } from "framer-motion";
-import { Check, Sparkles, Zap, Crown, TrendingUp } from "lucide-react";
+import { Check, Sparkles, Zap, Crown } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { PLANS } from "@/lib/stripe";
@@ -106,9 +105,9 @@ export function PricingSection() {
               onClick={() => setIsYearly(true)}
             >
               Annuel
-              <Badge className="bg-green-500/20 text-green-600 dark:text-green-400 border-green-500/30">
+              <span className="text-xs bg-green-500/20 text-green-600 dark:text-green-400 border border-green-500/30 px-2 py-0.5 rounded-full">
                 -20%
-              </Badge>
+              </span>
             </Label>
           </motion.div>
         </motion.div>
@@ -141,26 +140,6 @@ export function PricingSection() {
                       : "border-border/50 hover:border-primary/30"
                   }`}
                 >
-                  {/* Popular badge - discret */}
-                  {plan.popular && (
-                    <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                      <motion.div
-                        initial={{ y: -10, opacity: 0 }}
-                        animate={{ y: 0, opacity: 1 }}
-                        transition={{ delay: 0.3 }}
-                        className="flex gap-2"
-                      >
-                        <Badge variant="secondary" className="bg-slate-800 text-slate-200 border border-slate-700 px-3 py-1 text-xs font-medium">
-                          <Sparkles className="h-3 w-3 mr-1.5 text-slate-400" />
-                          Populaire
-                        </Badge>
-                        <Badge variant="secondary" className="bg-slate-800 text-emerald-400 border border-slate-700 px-3 py-1 text-xs font-medium">
-                          Meilleur rapport qualité-prix
-                        </Badge>
-                      </motion.div>
-                    </div>
-                  )}
-
                   {/* Plan icon */}
                   <div
                     className={`inline-flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br ${gradient} shadow-lg mb-4`}
