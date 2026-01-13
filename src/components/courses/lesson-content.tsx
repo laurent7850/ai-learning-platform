@@ -1,12 +1,49 @@
 "use client";
 
+import dynamic from "next/dynamic";
+
+// Lazy load interactive lessons pour optimiser le bundle
+const PromptingBeginnerLesson = dynamic(
+  () => import("./lessons/prompting-beginner").then((mod) => mod.PromptingBeginnerLesson),
+  { loading: () => <div className="animate-pulse bg-muted h-96 rounded-xl" /> }
+);
+
+const PromptingIntermediateLesson = dynamic(
+  () => import("./lessons/prompting-intermediate").then((mod) => mod.PromptingIntermediateLesson),
+  { loading: () => <div className="animate-pulse bg-muted h-96 rounded-xl" /> }
+);
+
+// Mapping des leçons interactives
+const interactiveLessons: Record<string, React.ComponentType> = {
+  "prompting-beginner": PromptingBeginnerLesson,
+  "prompting-intermediate": PromptingIntermediateLesson,
+};
+
 interface LessonContentProps {
   content: string;
 }
 
 export function LessonContent({ content }: LessonContentProps) {
-  // Simple markdown-like rendering
-  // In production, you'd use a proper markdown parser like react-markdown
+  // Vérifier si c'est une leçon interactive
+  if (content.startsWith("INTERACTIVE_LESSON:")) {
+    const lessonId = content.replace("INTERACTIVE_LESSON:", "").trim();
+    const InteractiveComponent = interactiveLessons[lessonId];
+
+    if (InteractiveComponent) {
+      return <InteractiveComponent />;
+    }
+
+    // Fallback si la leçon interactive n'existe pas
+    return (
+      <div className="text-center py-12">
+        <p className="text-muted-foreground">
+          Leçon interactive non trouvée: {lessonId}
+        </p>
+      </div>
+    );
+  }
+
+  // Simple markdown-like rendering for regular content
   const renderContent = (text: string) => {
     return text
       .split("\n\n")
