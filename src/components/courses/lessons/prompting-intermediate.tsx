@@ -147,6 +147,8 @@ export function PromptingIntermediateLesson() {
       setCompletedSections((prev) => new Set([...prev, currentSection]));
     }
     setCurrentSection(index);
+    // Scroll vers le haut de la page
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const analyzePrompt = (text: string) => {
