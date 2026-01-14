@@ -18,11 +18,17 @@ const UseCaseBeginnerLesson = dynamic(
   { loading: () => <div className="animate-pulse bg-muted h-96 rounded-xl" /> }
 );
 
+const UseCaseIntermediateLesson = dynamic(
+  () => import("./lessons/usecase-intermediate").then((mod) => mod.UseCaseIntermediateLesson),
+  { loading: () => <div className="animate-pulse bg-muted h-96 rounded-xl" /> }
+);
+
 // Mapping des leçons interactives
 const interactiveLessons: Record<string, React.ComponentType> = {
   "prompting-beginner": PromptingBeginnerLesson,
   "prompting-intermediate": PromptingIntermediateLesson,
   "usecase-beginner": UseCaseBeginnerLesson,
+  "usecase-intermediate": UseCaseIntermediateLesson,
 };
 
 interface LessonContentProps {

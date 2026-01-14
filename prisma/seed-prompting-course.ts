@@ -27,7 +27,7 @@ async function main() {
       thumbnail: "https://images.unsplash.com/photo-1655720828018-edd2daec9349?w=800&q=80",
       level: Level.BEGINNER,
       category: "prompting",
-      duration: 135,
+      duration: 180,
       published: true,
       requiredPlan: Plan.FREE,
       chapters: {
@@ -73,6 +73,22 @@ async function main() {
                   title: "Prompt Engineering Avancé",
                   slug: "prompt-avance-intermediaire",
                   content: "INTERACTIVE_LESSON:prompting-intermediate",
+                  duration: 45,
+                  order: 1,
+                  isFree: false,
+                },
+              ],
+            },
+          },
+          {
+            title: "Module 4 : Cas d'usage avancés",
+            order: 4,
+            lessons: {
+              create: [
+                {
+                  title: "Cas d'usage IA avancés",
+                  slug: "usecase-intermediaire",
+                  content: "INTERACTIVE_LESSON:usecase-intermediate",
                   duration: 45,
                   order: 1,
                   isFree: false,
