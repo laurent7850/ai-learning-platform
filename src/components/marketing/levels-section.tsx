@@ -5,7 +5,6 @@ import { motion } from "framer-motion";
 import {
   GraduationCap,
   Rocket,
-  CheckCircle2,
   ArrowRight,
   MessageSquare,
   Sparkles,
@@ -62,69 +61,64 @@ const levels = [
 
 export function LevelsSection() {
   return (
-    <section className="py-20 md:py-32 bg-muted/30">
+    <section className="py-16 md:py-24 bg-muted/20">
       <div className="container">
-        <div className="mx-auto max-w-2xl text-center mb-16">
-          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
+        <div className="mx-auto max-w-2xl text-center mb-12">
+          <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
             Deux niveaux pour progresser
           </h2>
-          <p className="mt-4 text-lg text-muted-foreground">
+          <p className="mt-3 text-muted-foreground">
             Que vous soyez débutant ou que vous souhaitiez approfondir vos
             connaissances, nous avons le parcours qu'il vous faut.
           </p>
         </div>
 
-        <div className="grid gap-8 lg:grid-cols-2">
+        <div className="grid gap-5 lg:grid-cols-2">
           {levels.map((level, index) => (
             <motion.div
               key={level.id}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 15 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.2 }}
-              className="relative rounded-2xl border bg-card p-8 hover:shadow-lg transition-shadow"
+              transition={{ duration: 0.4, delay: index * 0.1 }}
+              className="rounded-lg border border-border/40 bg-card p-6 transition-colors hover:border-border/60"
             >
-              <div className="flex items-start justify-between mb-6">
-                <div className="flex items-center gap-4">
-                  <div
-                    className={`flex h-14 w-14 items-center justify-center rounded-xl ${
-                      level.color === "emerald"
-                        ? "bg-emerald-100 text-emerald-600 dark:bg-emerald-900 dark:text-emerald-400"
-                        : "bg-blue-100 text-blue-600 dark:bg-blue-900 dark:text-blue-400"
-                    }`}
-                  >
-                    <level.icon className="h-7 w-7" />
-                  </div>
-                  <div>
-                    <Badge
-                      variant={level.badge as "beginner" | "intermediate"}
-                      className="mb-2"
-                    >
-                      {level.id === "beginner" ? "Débutant" : "Intermédiaire"}
-                    </Badge>
-                    <h3 className="text-xl font-semibold">{level.title}</h3>
-                  </div>
+              <div className="flex items-center gap-3 mb-4">
+                <div
+                  className={`flex h-10 w-10 items-center justify-center rounded-lg ${
+                    level.color === "emerald"
+                      ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+                      : "bg-blue-500/10 text-blue-600 dark:text-blue-400"
+                  }`}
+                >
+                  <level.icon className="h-5 w-5" />
+                </div>
+                <div>
+                  <Badge variant={level.badge as "beginner" | "intermediate"}>
+                    {level.id === "beginner" ? "Débutant" : "Intermédiaire"}
+                  </Badge>
+                  <h3 className="text-lg font-medium mt-1">{level.title}</h3>
                 </div>
               </div>
 
-              <p className="text-muted-foreground mb-6">{level.description}</p>
+              <p className="text-sm text-muted-foreground mb-5">{level.description}</p>
 
-              <div className="space-y-3 mb-8">
+              <div className="space-y-2 mb-6">
                 {level.categories.map((category) => (
                   <div
                     key={category.name}
-                    className="flex items-center gap-3 text-sm"
+                    className="flex items-center gap-2 text-sm"
                   >
-                    <category.icon className="h-4 w-4 text-muted-foreground" />
+                    <category.icon className="h-3.5 w-3.5 text-muted-foreground" />
                     <span>{category.name}</span>
                   </div>
                 ))}
               </div>
 
-              <Button variant="outline" className="w-full" asChild>
+              <Button variant="outline" size="sm" className="w-full" asChild>
                 <Link href={`/cours?level=${level.id}`}>
                   Voir les cours {level.id === "beginner" ? "débutant" : "intermédiaire"}
-                  <ArrowRight className="ml-2 h-4 w-4" />
+                  <ArrowRight className="ml-2 h-3.5 w-3.5" />
                 </Link>
               </Button>
             </motion.div>

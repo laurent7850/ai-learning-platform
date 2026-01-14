@@ -60,45 +60,30 @@ const testimonials = [
 
 function TestimonialCard({ testimonial }: { testimonial: typeof testimonials[0] }) {
   return (
-    <div className="group relative w-[350px] shrink-0 rounded-2xl border border-border/50 bg-card p-6 transition-all duration-300 hover:border-primary/20 hover:shadow-lg">
-      {/* Subtle glow on hover */}
-      <div className="absolute -inset-px rounded-2xl bg-primary/5 opacity-0 blur-lg transition-opacity duration-500 group-hover:opacity-100" />
+    <div className="w-[320px] shrink-0 rounded-lg border border-border/40 bg-card p-5 transition-colors hover:border-border/60">
+      <Quote className="absolute top-3 right-3 h-8 w-8 text-muted-foreground/10" />
 
-      {/* Quote icon */}
-      <Quote className="absolute top-4 right-4 h-10 w-10 text-primary/10 group-hover:text-primary/20 transition-colors" />
-
-      {/* Content */}
-      <div className="relative z-10">
-        {/* Stars */}
-        <div className="flex gap-1 mb-4">
+      <div className="relative">
+        <div className="flex gap-0.5 mb-3">
           {Array.from({ length: testimonial.rating }).map((_, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, scale: 0 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: i * 0.1, duration: 0.2 }}
-            >
-              <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
-            </motion.div>
+            <Star key={i} className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
           ))}
         </div>
 
-        {/* Testimonial text */}
-        <p className="text-sm text-muted-foreground leading-relaxed mb-6">
+        <p className="text-sm text-muted-foreground leading-relaxed mb-4">
           "{testimonial.content}"
         </p>
 
-        {/* Author */}
-        <div className="flex items-center gap-3">
-          <Avatar className="h-12 w-12 ring-2 ring-background shadow-md">
+        <div className="flex items-center gap-2.5">
+          <Avatar className="h-9 w-9">
             <AvatarImage src={testimonial.avatar} alt={testimonial.name} />
-            <AvatarFallback className="bg-gradient-to-br from-blue-600 to-indigo-600 text-white font-semibold">
+            <AvatarFallback className="bg-primary/10 text-primary text-xs">
               {getInitials(testimonial.name)}
             </AvatarFallback>
           </Avatar>
           <div>
-            <p className="font-semibold text-sm">{testimonial.name}</p>
-            <p className="text-xs text-muted-foreground">{testimonial.role}</p>
+            <p className="text-sm font-medium">{testimonial.name}</p>
+            <p className="text-[11px] text-muted-foreground">{testimonial.role}</p>
           </div>
         </div>
       </div>
@@ -114,40 +99,33 @@ export function TestimonialsSection() {
   const secondRow = testimonials.slice(3);
 
   return (
-    <section className="relative py-24 md:py-32 overflow-hidden bg-muted/30">
-      {/* Background decoration */}
-      <div className="absolute inset-0 dot-pattern opacity-30" />
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-primary/5 rounded-full blur-3xl" />
+    <section className="relative py-16 md:py-24 overflow-hidden bg-muted/20">
+      <div className="absolute inset-0 dot-pattern opacity-20" />
 
-      <div className="container relative mb-16">
-        {/* Section header */}
+      <div className="container relative mb-12">
         <motion.div
           ref={headerRef}
-          initial={{ opacity: 0, y: 30 }}
-          animate={isHeaderInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-          transition={{ duration: 0.6, ease: [0.25, 0.4, 0.25, 1] }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={isHeaderInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.5 }}
           className="mx-auto max-w-2xl text-center"
         >
-          <span className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-sm font-medium text-primary mb-4">
-            <Sparkles className="h-4 w-4" />
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-xs font-medium text-primary mb-3">
+            <Sparkles className="h-3.5 w-3.5" />
             Témoignages
           </span>
-          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
-            Ce que disent{" "}
-            <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              nos apprenants
-            </span>
+          <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
+            Ce que disent nos apprenants
           </h2>
-          <p className="mt-4 text-lg text-muted-foreground">
+          <p className="mt-3 text-muted-foreground">
             Rejoignez des milliers de personnes qui ont transformé leur façon de
             travailler grâce à l'IA.
           </p>
         </motion.div>
       </div>
 
-      {/* Testimonials marquee */}
       <div className="relative">
-        <Marquee speed="slow" pauseOnHover className="mb-4">
+        <Marquee speed="slow" pauseOnHover className="mb-3">
           {firstRow.map((testimonial) => (
             <TestimonialCard key={testimonial.id} testimonial={testimonial} />
           ))}
@@ -160,34 +138,25 @@ export function TestimonialsSection() {
         </Marquee>
       </div>
 
-      {/* Stats banner */}
       <motion.div
-        initial={{ opacity: 0, y: 30 }}
+        initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        transition={{ duration: 0.6, delay: 0.2 }}
-        className="container mt-16"
+        transition={{ duration: 0.5 }}
+        className="container mt-12"
       >
-        <div className="mx-auto max-w-4xl rounded-2xl border border-border/50 bg-card/50 backdrop-blur-sm p-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+        <div className="mx-auto max-w-3xl rounded-lg border border-border/40 bg-card p-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
             {[
               { value: "10,000+", label: "Apprenants actifs" },
               { value: "50+", label: "Cours disponibles" },
               { value: "98%", label: "Taux de satisfaction" },
               { value: "24/7", label: "Accès illimité" },
-            ].map((stat, index) => (
-              <motion.div
-                key={stat.label}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: 0.3 + index * 0.1 }}
-              >
-                <p className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                  {stat.value}
-                </p>
-                <p className="mt-1 text-sm text-muted-foreground">{stat.label}</p>
-              </motion.div>
+            ].map((stat) => (
+              <div key={stat.label}>
+                <p className="text-2xl font-bold text-primary">{stat.value}</p>
+                <p className="mt-0.5 text-xs text-muted-foreground">{stat.label}</p>
+              </div>
             ))}
           </div>
         </div>

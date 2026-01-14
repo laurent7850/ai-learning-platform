@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Clock, Users, Lock, Sparkles, Brain, Palette, Zap, MessageSquare, Wand2, Bot, TrendingUp, Code, Database, GraduationCap } from "lucide-react";
+import { Clock, Users, Lock, Sparkles, Brain, Palette, Zap, MessageSquare, Bot, TrendingUp, Code, Database, GraduationCap } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
@@ -14,61 +14,51 @@ interface CourseCardProps {
   showProgress?: boolean;
 }
 
-// Configuration par sujet (catégorie)
-const subjectConfig: Record<string, { icon: React.ElementType; name: string; gradient: string; iconBg: string }> = {
+const subjectConfig: Record<string, { icon: React.ElementType; name: string; color: string }> = {
   prompting: {
     icon: Sparkles,
     name: "Prompt Engineering",
-    gradient: "from-violet-500/20 to-purple-500/20",
-    iconBg: "bg-violet-500/10 text-violet-500",
+    color: "bg-violet-500/10 text-violet-600 dark:text-violet-400",
   },
   "chatgpt-claude": {
     icon: MessageSquare,
     name: "ChatGPT & Claude",
-    gradient: "from-emerald-500/20 to-teal-500/20",
-    iconBg: "bg-emerald-500/10 text-emerald-500",
+    color: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
   },
   "images-ia": {
     icon: Palette,
     name: "Génération d'images",
-    gradient: "from-pink-500/20 to-rose-500/20",
-    iconBg: "bg-pink-500/10 text-pink-500",
+    color: "bg-pink-500/10 text-pink-600 dark:text-pink-400",
   },
   automatisation: {
     icon: Bot,
     name: "Automatisation",
-    gradient: "from-amber-500/20 to-orange-500/20",
-    iconBg: "bg-amber-500/10 text-amber-500",
+    color: "bg-amber-500/10 text-amber-600 dark:text-amber-400",
   },
   productivite: {
     icon: Zap,
     name: "Productivité",
-    gradient: "from-yellow-500/20 to-amber-500/20",
-    iconBg: "bg-yellow-500/10 text-yellow-500",
+    color: "bg-yellow-500/10 text-yellow-600 dark:text-yellow-500",
   },
   "marketing-ia": {
     icon: TrendingUp,
     name: "Marketing IA",
-    gradient: "from-blue-500/20 to-indigo-500/20",
-    iconBg: "bg-blue-500/10 text-blue-500",
+    color: "bg-blue-500/10 text-blue-600 dark:text-blue-400",
   },
   "ia-developpeurs": {
     icon: Code,
     name: "IA pour développeurs",
-    gradient: "from-slate-500/20 to-zinc-500/20",
-    iconBg: "bg-slate-500/10 text-slate-500",
+    color: "bg-slate-500/10 text-slate-600 dark:text-slate-400",
   },
   rag: {
     icon: Database,
     name: "RAG & Chatbots",
-    gradient: "from-cyan-500/20 to-blue-500/20",
-    iconBg: "bg-cyan-500/10 text-cyan-500",
+    color: "bg-cyan-500/10 text-cyan-600 dark:text-cyan-400",
   },
   default: {
     icon: Brain,
     name: "Intelligence Artificielle",
-    gradient: "from-primary/20 to-accent/20",
-    iconBg: "bg-primary/10 text-primary",
+    color: "bg-primary/10 text-primary",
   },
 };
 
@@ -81,79 +71,58 @@ export function CourseCard({ course, showProgress = false }: CourseCardProps) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
-      whileHover={{ y: -4 }}
       transition={{ duration: 0.3 }}
     >
       <Link href={`/cours/${course.slug}`}>
-        <Card className="h-full overflow-hidden hover:shadow-lg hover:shadow-primary/5 transition-all duration-300 border-border/50 hover:border-primary/20">
-          {/* Header avec gradient et icône */}
-          <div className={`relative p-6 bg-gradient-to-br ${config.gradient}`}>
-            {/* Icône principale */}
-            <div className={`inline-flex p-3 rounded-xl ${config.iconBg}`}>
-              <IconComponent className="h-6 w-6" />
-            </div>
-
-            {/* Badge de verrouillage */}
-            {isLocked && (
-              <div className="absolute top-4 right-4">
-                <div className="flex items-center gap-1 rounded-full bg-background/90 backdrop-blur-sm px-2.5 py-1 text-xs font-medium shadow-sm">
+        <Card className="h-full overflow-hidden transition-colors hover:border-border/60">
+          <CardContent className="p-4">
+            <div className="flex items-start justify-between gap-3 mb-3">
+              <div className={`flex h-9 w-9 items-center justify-center rounded-lg ${config.color}`}>
+                <IconComponent className="h-4.5 w-4.5" />
+              </div>
+              {isLocked && (
+                <div className="flex items-center gap-1 text-[11px] text-muted-foreground">
                   <Lock className="h-3 w-3" />
                   Premium
                 </div>
-              </div>
-            )}
-
-            {/* Sujet */}
-            <div className="mt-4">
-              <span className="text-xs px-2.5 py-1 rounded-full bg-background/80 backdrop-blur-sm text-foreground/80 font-medium">
-                {config.name}
-              </span>
-            </div>
-          </div>
-
-          <CardContent className="p-5">
-            {/* Niveau */}
-            <div className="flex items-center gap-2 mb-3">
-              <Badge
-                variant={course.level === "BEGINNER" ? "beginner" : "intermediate"}
-                className="text-xs"
-              >
-                <GraduationCap className="h-3 w-3 mr-1" />
-                {course.level === "BEGINNER" ? "Débutant" : "Intermédiaire"}
-              </Badge>
+              )}
             </div>
 
-            {/* Title */}
-            <h3 className="font-semibold text-lg line-clamp-2 mb-2 group-hover:text-primary transition-colors">
+            <span className="text-[11px] text-muted-foreground">{config.name}</span>
+
+            <h3 className="font-medium text-base line-clamp-2 mt-1 mb-1.5">
               {course.title}
             </h3>
 
-            {/* Description */}
-            <p className="text-sm text-muted-foreground line-clamp-2 mb-4">
+            <p className="text-sm text-muted-foreground line-clamp-2 mb-3">
               {course.description}
             </p>
 
-            {/* Progress bar */}
+            <Badge variant={course.level === "BEGINNER" ? "beginner" : "intermediate"}>
+              <GraduationCap className="h-3 w-3 mr-1" />
+              {course.level === "BEGINNER" ? "Débutant" : "Intermédiaire"}
+            </Badge>
+
             {hasProgress && (
-              <div className="space-y-1.5 mb-4">
-                <div className="flex justify-between text-xs">
+              <div className="space-y-1 mt-3">
+                <div className="flex justify-between text-[11px]">
                   <span className="text-muted-foreground">Progression</span>
-                  <span className="font-medium text-primary">{course.progressPercentage}%</span>
+                  <span className="font-medium">{course.progressPercentage}%</span>
                 </div>
-                <Progress value={course.progressPercentage} className="h-1.5" />
+                <Progress value={course.progressPercentage} className="h-1" />
               </div>
             )}
           </CardContent>
 
-          <CardFooter className="px-5 pb-5 pt-0 flex items-center justify-between text-sm text-muted-foreground">
-            <div className="flex items-center gap-1.5">
-              <Clock className="h-4 w-4" />
+          <CardFooter className="px-4 pb-4 pt-0 flex items-center justify-between text-[11px] text-muted-foreground">
+            <div className="flex items-center gap-1">
+              <Clock className="h-3.5 w-3.5" />
               <span>{formatDuration(course.duration)}</span>
             </div>
-            <div className="flex items-center gap-1.5">
-              <Users className="h-4 w-4" />
+            <div className="flex items-center gap-1">
+              <Users className="h-3.5 w-3.5" />
               <span>{course._count.enrollments.toLocaleString()} inscrits</span>
             </div>
           </CardFooter>

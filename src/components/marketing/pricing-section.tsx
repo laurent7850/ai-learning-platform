@@ -16,10 +16,10 @@ const planIcons = {
   PRO: Crown,
 };
 
-const planGradients = {
-  FREE: "from-slate-500 to-slate-600",
-  BEGINNER: "from-blue-600 to-blue-700",
-  PRO: "from-blue-600 to-indigo-600",
+const planColors = {
+  FREE: "bg-slate-500",
+  BEGINNER: "bg-blue-500",
+  PRO: "bg-indigo-500",
 };
 
 export function PricingSection() {
@@ -43,46 +43,34 @@ export function PricingSection() {
   ];
 
   return (
-    <section id="pricing" className="relative py-24 md:py-32 overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute inset-0 dot-pattern opacity-30" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1200px] h-[800px] bg-primary/5 rounded-full blur-3xl" />
+    <section id="pricing" className="relative py-16 md:py-24 overflow-hidden">
+      <div className="absolute inset-0 dot-pattern opacity-20" />
 
       <div className="container relative">
-        {/* Section header */}
         <motion.div
           ref={headerRef}
-          initial={{ opacity: 0, y: 30 }}
-          animate={isHeaderInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-          transition={{ duration: 0.6, ease: [0.25, 0.4, 0.25, 1] }}
-          className="mx-auto max-w-2xl text-center mb-12"
+          initial={{ opacity: 0, y: 20 }}
+          animate={isHeaderInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.5 }}
+          className="mx-auto max-w-2xl text-center mb-10"
         >
-          <span className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-sm font-medium text-primary mb-4">
-            <Sparkles className="h-4 w-4" />
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-xs font-medium text-primary mb-3">
+            <Sparkles className="h-3.5 w-3.5" />
             Tarification simple
           </span>
-          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
-            Des tarifs adaptés à{" "}
-            <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              vos besoins
-            </span>
+          <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
+            Des tarifs adaptés à vos besoins
           </h2>
-          <p className="mt-4 text-lg text-muted-foreground">
+          <p className="mt-3 text-muted-foreground">
             Commencez gratuitement et évoluez selon vos objectifs.
           </p>
 
-          {/* Billing toggle */}
-          <motion.div
-            className="mt-8 inline-flex items-center gap-4 rounded-full border border-border/50 bg-card/50 backdrop-blur-sm p-2"
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.2, duration: 0.4 }}
-          >
+          <div className="mt-6 inline-flex items-center gap-3 rounded-full border border-border/40 bg-card p-1.5">
             <Label
               htmlFor="billing"
-              className={`cursor-pointer px-4 py-2 rounded-full transition-all ${
+              className={`cursor-pointer px-3 py-1.5 rounded-full text-sm transition-colors ${
                 !isYearly
-                  ? "bg-primary text-primary-foreground font-medium"
+                  ? "bg-primary text-primary-foreground"
                   : "text-muted-foreground hover:text-foreground"
               }`}
               onClick={() => setIsYearly(false)}
@@ -97,160 +85,120 @@ export function PricingSection() {
             />
             <Label
               htmlFor="billing"
-              className={`cursor-pointer px-4 py-2 rounded-full transition-all flex items-center gap-2 ${
+              className={`cursor-pointer px-3 py-1.5 rounded-full text-sm transition-colors flex items-center gap-1.5 ${
                 isYearly
-                  ? "bg-primary text-primary-foreground font-medium"
+                  ? "bg-primary text-primary-foreground"
                   : "text-muted-foreground hover:text-foreground"
               }`}
               onClick={() => setIsYearly(true)}
             >
               Annuel
-              <span className="text-xs bg-green-500/20 text-green-600 dark:text-green-400 border border-green-500/30 px-2 py-0.5 rounded-full">
+              <span className="text-[10px] bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 px-1.5 py-0.5 rounded-full">
                 -20%
               </span>
             </Label>
-          </motion.div>
+          </div>
         </motion.div>
 
-        {/* Pricing cards */}
-        <div className="grid gap-8 md:grid-cols-3 max-w-5xl mx-auto">
+        <div className="grid gap-5 md:grid-cols-3 max-w-4xl mx-auto">
           {plans.map((plan, index) => {
             const Icon = planIcons[plan.plan as keyof typeof planIcons];
-            const gradient = planGradients[plan.plan as keyof typeof planGradients];
+            const color = planColors[plan.plan as keyof typeof planColors];
 
             return (
               <motion.div
                 key={plan.plan}
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="group relative"
+                transition={{ duration: 0.4, delay: index * 0.1 }}
+                className={`relative rounded-lg border bg-card p-6 transition-colors ${
+                  plan.popular
+                    ? "border-primary/40"
+                    : "border-border/40 hover:border-border/60"
+                }`}
               >
-                {/* Popular plan subtle border */}
                 {plan.popular && (
-                  <div className="absolute -inset-[1px] rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 opacity-50 blur-[2px]" />
+                  <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground text-[10px] font-medium px-2 py-0.5 rounded-full">
+                    Populaire
+                  </span>
                 )}
 
-                {/* Card */}
-                <div
-                  className={`relative h-full rounded-2xl border bg-card p-8 transition-all duration-300 hover:shadow-xl ${
-                    plan.popular
-                      ? "border-primary/50 shadow-lg shadow-primary/20"
-                      : "border-border/50 hover:border-primary/30"
-                  }`}
-                >
-                  {/* Plan icon */}
-                  <div
-                    className={`inline-flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br ${gradient} shadow-lg mb-4`}
-                  >
-                    <Icon className="h-7 w-7 text-white" />
-                  </div>
-
-                  {/* Plan name */}
-                  <h3 className="text-xl font-semibold">{plan.name}</h3>
-                  <p className="mt-2 text-sm text-muted-foreground">
-                    {plan.description}
-                  </p>
-
-                  {/* Price */}
-                  <div className="mt-6 mb-6">
-                    <AnimatePresence mode="wait">
-                      <motion.div
-                        key={isYearly ? "yearly" : "monthly"}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                        transition={{ duration: 0.2 }}
-                      >
-                        <span className="text-4xl font-bold">
-                          {formatPrice(
-                            isYearly
-                              ? plan.price.yearly / 12
-                              : plan.price.monthly
-                          )}
-                        </span>
-                        {plan.price.monthly > 0 && (
-                          <span className="text-muted-foreground">/mois</span>
-                        )}
-                        {isYearly && plan.price.yearly > 0 && (
-                          <p className="mt-1 text-sm text-muted-foreground">
-                            Facturé {formatPrice(plan.price.yearly)}/an
-                          </p>
-                        )}
-                      </motion.div>
-                    </AnimatePresence>
-                  </div>
-
-                  {/* CTA Button */}
-                  <motion.div
-                    className={`relative mb-8 ${plan.popular ? "group/btn" : ""}`}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    {plan.popular && (
-                      <div className="absolute -inset-0.5 rounded-xl bg-blue-600/30 blur-md group-hover/btn:bg-blue-600/40 transition-all duration-300" />
-                    )}
-                    <Button
-                      variant={plan.popular ? "default" : "outline"}
-                      className={`w-full relative ${
-                        plan.popular
-                          ? "bg-blue-600 hover:bg-blue-700 text-white shadow-md"
-                          : "hover:border-primary/40 hover:bg-primary/5"
-                      }`}
-                      asChild
-                    >
-                      <Link
-                        href={
-                          plan.plan === "FREE"
-                            ? "/inscription"
-                            : `/inscription?plan=${plan.plan}&billing=${
-                                isYearly ? "yearly" : "monthly"
-                              }`
-                        }
-                      >
-                        {plan.plan === "FREE"
-                          ? "Créer mon compte gratuit"
-                          : "S'abonner"}
-                      </Link>
-                    </Button>
-                  </motion.div>
-
-                  {/* Features list */}
-                  <ul className="space-y-3">
-                    {plan.features.map((feature, featureIndex) => (
-                      <motion.li
-                        key={feature}
-                        initial={{ opacity: 0, x: -10 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                        transition={{
-                          duration: 0.3,
-                          delay: 0.3 + featureIndex * 0.05,
-                        }}
-                        className="flex items-start gap-3 text-sm"
-                      >
-                        <div className={`rounded-full p-0.5 bg-gradient-to-br ${gradient}`}>
-                          <Check className="h-4 w-4 text-white" />
-                        </div>
-                        <span>{feature}</span>
-                      </motion.li>
-                    ))}
-                  </ul>
+                <div className={`inline-flex h-10 w-10 items-center justify-center rounded-lg ${color} mb-4`}>
+                  <Icon className="h-5 w-5 text-white" />
                 </div>
+
+                <h3 className="text-lg font-medium">{plan.name}</h3>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  {plan.description}
+                </p>
+
+                <div className="mt-4 mb-5">
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={isYearly ? "yearly" : "monthly"}
+                      initial={{ opacity: 0, y: 5 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -5 }}
+                      transition={{ duration: 0.15 }}
+                    >
+                      <span className="text-3xl font-bold">
+                        {formatPrice(
+                          isYearly
+                            ? plan.price.yearly / 12
+                            : plan.price.monthly
+                        )}
+                      </span>
+                      {plan.price.monthly > 0 && (
+                        <span className="text-sm text-muted-foreground">/mois</span>
+                      )}
+                      {isYearly && plan.price.yearly > 0 && (
+                        <p className="mt-0.5 text-xs text-muted-foreground">
+                          Facturé {formatPrice(plan.price.yearly)}/an
+                        </p>
+                      )}
+                    </motion.div>
+                  </AnimatePresence>
+                </div>
+
+                <Button
+                  variant={plan.popular ? "default" : "outline"}
+                  size="sm"
+                  className="w-full mb-5"
+                  asChild
+                >
+                  <Link
+                    href={
+                      plan.plan === "FREE"
+                        ? "/inscription"
+                        : `/inscription?plan=${plan.plan}&billing=${
+                            isYearly ? "yearly" : "monthly"
+                          }`
+                    }
+                  >
+                    {plan.plan === "FREE"
+                      ? "Créer mon compte gratuit"
+                      : "S'abonner"}
+                  </Link>
+                </Button>
+
+                <ul className="space-y-2">
+                  {plan.features.map((feature) => (
+                    <li
+                      key={feature}
+                      className="flex items-start gap-2 text-sm"
+                    >
+                      <Check className={`h-4 w-4 ${plan.popular ? "text-primary" : "text-muted-foreground"} shrink-0 mt-0.5`} />
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
               </motion.div>
             );
           })}
         </div>
 
-        {/* Guarantee */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-          className="mt-12 text-center"
-        >
+        <div className="mt-8 text-center">
           <p className="text-sm text-muted-foreground">
             Garantie satisfait ou remboursé 14 jours.{" "}
             <Link
@@ -260,7 +208,7 @@ export function PricingSection() {
               Questions fréquentes
             </Link>
           </p>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

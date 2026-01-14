@@ -50,22 +50,22 @@ export function Sidebar({ className }: SidebarProps) {
   return (
     <aside
       className={cn(
-        "flex flex-col w-64 border-r bg-card h-screen sticky top-0",
+        "flex flex-col w-56 border-r border-border/30 bg-background h-screen sticky top-0",
         className
       )}
     >
       {/* Logo */}
-      <div className="p-6 border-b">
+      <div className="p-4 border-b border-border/30">
         <Link href="/" className="flex items-center gap-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg gradient-primary">
-            <Brain className="h-5 w-5 text-white" />
+          <div className="flex h-7 w-7 items-center justify-center rounded-md bg-primary">
+            <Brain className="h-4 w-4 text-white" />
           </div>
-          <span className="font-bold text-xl">{siteConfig.name}</span>
+          <span className="font-semibold">{siteConfig.name}</span>
         </Link>
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 p-4 space-y-1">
+      <nav className="flex-1 p-3 space-y-0.5">
         {navItems.map((item) => {
           const isActive = pathname === item.href;
           return (
@@ -73,13 +73,13 @@ export function Sidebar({ className }: SidebarProps) {
               key={item.href}
               href={item.href}
               className={cn(
-                "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
+                "flex items-center gap-2.5 px-2.5 py-2 rounded-md text-sm transition-colors",
                 isActive
-                  ? "bg-primary text-primary-foreground"
-                  : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                  ? "bg-primary/10 text-primary font-medium"
+                  : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
               )}
             >
-              <item.icon className="h-5 w-5" />
+              <item.icon className="h-4 w-4" />
               {item.title}
             </Link>
           );
@@ -87,19 +87,20 @@ export function Sidebar({ className }: SidebarProps) {
       </nav>
 
       {/* Bottom Actions */}
-      <div className="p-4 border-t space-y-2">
-        <Button variant="ghost" className="w-full justify-start" asChild>
+      <div className="p-3 border-t border-border/30 space-y-0.5">
+        <Button variant="ghost" size="sm" className="w-full justify-start h-8 text-sm" asChild>
           <Link href="/cours">
-            <ChevronLeft className="h-4 w-4 mr-2" />
+            <ChevronLeft className="h-3.5 w-3.5 mr-2" />
             Retour aux cours
           </Link>
         </Button>
         <Button
           variant="ghost"
-          className="w-full justify-start text-destructive hover:text-destructive"
+          size="sm"
+          className="w-full justify-start h-8 text-sm text-muted-foreground hover:text-destructive"
           onClick={() => signOut({ callbackUrl: "/" })}
         >
-          <LogOut className="h-4 w-4 mr-2" />
+          <LogOut className="h-3.5 w-3.5 mr-2" />
           Déconnexion
         </Button>
       </div>

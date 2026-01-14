@@ -12,178 +12,73 @@ const benefits = [
   { icon: Clock, text: "Support 24/7" },
 ];
 
-// Positions fixes pour éviter les erreurs d'hydratation
-const floatingParticles = [
-  { left: 10, top: 15, duration: 4.5, delay: 0.3 },
-  { left: 25, top: 70, duration: 5.2, delay: 1.2 },
-  { left: 45, top: 25, duration: 4.8, delay: 2.1 },
-  { left: 60, top: 80, duration: 5.5, delay: 0.6 },
-  { left: 75, top: 35, duration: 4.3, delay: 1.8 },
-  { left: 85, top: 60, duration: 5.0, delay: 2.7 },
-  { left: 35, top: 90, duration: 4.7, delay: 0.9 },
-  { left: 90, top: 20, duration: 5.3, delay: 1.5 },
-];
-
 export function CTASection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section className="relative py-24 md:py-32 overflow-hidden">
+    <section className="relative py-16 md:py-24 overflow-hidden">
       <div className="container">
         <motion.div
           ref={ref}
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-          transition={{ duration: 0.6, ease: [0.25, 0.4, 0.25, 1] }}
-          className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary via-primary to-accent p-12 md:p-20 text-center"
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.5 }}
+          className="relative overflow-hidden rounded-xl bg-primary p-10 md:p-14 text-center"
         >
-          {/* Animated background elements */}
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.1)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.1)_1px,transparent_1px)] bg-[size:4rem_4rem]" />
-
-          <motion.div
-            className="absolute -top-32 -right-32 h-80 w-80 rounded-full bg-white/10 blur-3xl"
-            animate={{
-              scale: [1, 1.1, 1],
-              opacity: [0.1, 0.15, 0.1],
-            }}
-            transition={{
-              duration: 8,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-          />
-          <motion.div
-            className="absolute -bottom-32 -left-32 h-80 w-80 rounded-full bg-white/10 blur-3xl"
-            animate={{
-              scale: [1.1, 1, 1.1],
-              opacity: [0.1, 0.15, 0.1],
-            }}
-            transition={{
-              duration: 8,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: 2,
-            }}
-          />
-
-          {/* Subtle floating particles */}
-          {floatingParticles.map((particle, i) => (
-            <motion.div
-              key={i}
-              className="absolute w-1 h-1 rounded-full bg-white/20"
-              style={{
-                left: `${particle.left}%`,
-                top: `${particle.top}%`,
-              }}
-              animate={{
-                y: [0, -20, 0],
-                opacity: [0, 0.5, 0],
-              }}
-              transition={{
-                duration: particle.duration,
-                repeat: Infinity,
-                delay: particle.delay,
-                ease: "easeInOut",
-              }}
-            />
-          ))}
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:3rem_3rem]" />
 
           <div className="relative z-10">
-            {/* Icon */}
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={isInView ? { scale: 1 } : { scale: 0 }}
-              transition={{ duration: 0.5, delay: 0.2, type: "spring" }}
-            >
-              <div className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-sm mb-6">
-                <Sparkles className="h-8 w-8 text-white" />
-              </div>
-            </motion.div>
+            <div className="inline-flex h-12 w-12 items-center justify-center rounded-lg bg-white/15 mb-5">
+              <Sparkles className="h-6 w-6 text-white" />
+            </div>
 
-            {/* Heading */}
-            <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              className="text-3xl font-bold tracking-tight text-white sm:text-4xl md:text-5xl"
-            >
+            <h2 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
               Prêt à maîtriser l'IA ?
-            </motion.h2>
+            </h2>
 
-            {/* Subheading */}
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-              transition={{ duration: 0.5, delay: 0.4 }}
-              className="mt-4 text-lg text-white/80 max-w-2xl mx-auto"
-            >
+            <p className="mt-3 text-white/80 max-w-xl mx-auto">
               Rejoignez plus de 10 000 apprenants et commencez votre parcours
               vers la maîtrise de l'intelligence artificielle dès aujourd'hui.
-            </motion.p>
+            </p>
 
-            {/* CTA Buttons */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-              transition={{ duration: 0.5, delay: 0.5 }}
-              className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4"
-            >
-              <motion.div
-                className="relative group"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
+            <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
+              <Button
+                size="lg"
+                className="bg-white text-primary hover:bg-white/95"
+                asChild
               >
-                <div className="absolute -inset-0.5 rounded-xl bg-white/20 blur-md group-hover:bg-white/30 transition-all duration-300" />
-                <Button
-                  size="xl"
-                  className="relative bg-white text-primary hover:bg-white/95 shadow-lg font-semibold"
-                  asChild
-                >
-                  <Link href="/inscription">
-                    Créer mon compte gratuit
-                    <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
-                  </Link>
-                </Button>
-              </motion.div>
+                <Link href="/inscription">
+                  Créer mon compte gratuit
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
 
               <Button
-                size="xl"
+                size="lg"
                 variant="outline"
-                className="border-white/30 text-white hover:bg-white/10 backdrop-blur-sm"
+                className="border-white/30 text-white hover:bg-white/10"
                 asChild
               >
                 <Link href="/cours">Explorer les cours</Link>
               </Button>
-            </motion.div>
+            </div>
 
-            {/* Benefits */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-              transition={{ duration: 0.5, delay: 0.6 }}
-              className="mt-10 flex flex-wrap items-center justify-center gap-6"
-            >
-              {benefits.map((benefit, index) => (
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-5">
+              {benefits.map((benefit) => (
                 <div
                   key={benefit.text}
-                  className="flex items-center gap-2 text-sm text-white/80"
+                  className="flex items-center gap-1.5 text-sm text-white/70"
                 >
-                  <benefit.icon className="h-4 w-4" />
+                  <benefit.icon className="h-3.5 w-3.5" />
                   <span>{benefit.text}</span>
                 </div>
               ))}
-            </motion.div>
+            </div>
 
-            {/* Trust badge */}
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-              transition={{ duration: 0.5, delay: 0.7 }}
-              className="mt-8 text-sm text-white/60"
-            >
+            <p className="mt-6 text-xs text-white/50">
               Aucune carte bancaire requise pour commencer
-            </motion.p>
+            </p>
           </div>
         </motion.div>
       </div>

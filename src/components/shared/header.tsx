@@ -45,91 +45,80 @@ export function Header() {
   return (
     <motion.header
       className={cn(
-        "sticky top-0 z-50 w-full transition-all duration-300",
+        "sticky top-0 z-50 w-full transition-all duration-200",
         isScrolled
-          ? "bg-background/80 backdrop-blur-xl border-b border-border/50 shadow-sm"
+          ? "bg-background/90 backdrop-blur-md border-b border-border/30"
           : "bg-transparent border-b border-transparent"
       )}
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      transition={{ duration: 0.3, ease: "easeOut" }}
+      transition={{ duration: 0.2 }}
     >
-      <nav className="container flex h-16 items-center justify-between">
+      <nav className="container flex h-14 items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 group">
-          <motion.div
-            className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-blue-600 to-indigo-600 shadow-md"
-            whileHover={{ scale: 1.05, rotate: 3 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <Brain className="h-5 w-5 text-white" />
-          </motion.div>
-          <span className="hidden font-bold text-xl sm:inline-block group-hover:text-primary transition-colors">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
+            <Brain className="h-4 w-4 text-white" />
+          </div>
+          <span className="hidden font-semibold text-lg sm:inline-block">
             {siteConfig.name}
           </span>
         </Link>
 
         {/* Desktop Navigation */}
-        <div className="hidden md:flex md:items-center md:gap-1">
+        <div className="hidden md:flex md:items-center md:gap-0.5">
           {navItems.map((item) => (
             <Link
               key={item.href}
               href={item.href}
               className={cn(
-                "relative px-4 py-2 text-sm font-medium transition-colors rounded-lg",
+                "px-3 py-1.5 text-sm font-medium transition-colors rounded-md",
                 pathname === item.href
-                  ? "text-primary"
-                  : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                  ? "text-foreground"
+                  : "text-muted-foreground hover:text-foreground"
               )}
             >
               {item.title}
-              {pathname === item.href && (
-                <motion.div
-                  layoutId="activeNav"
-                  className="absolute inset-0 bg-primary/10 rounded-lg"
-                  transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                />
-              )}
             </Link>
           ))}
         </div>
 
         {/* Desktop Actions */}
-        <div className="hidden md:flex md:items-center md:gap-3">
+        <div className="hidden md:flex md:items-center md:gap-2">
           <ThemeToggle />
 
           {isLoading ? (
-            <div className="h-9 w-20 animate-pulse rounded-lg bg-muted" />
+            <div className="h-8 w-16 animate-pulse rounded-md bg-muted" />
           ) : isAuthenticated ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="ghost"
-                  className="flex items-center gap-2 px-2 hover:bg-muted/50"
+                  className="flex items-center gap-2 px-2"
                 >
-                  <Avatar className="h-8 w-8 ring-2 ring-background">
+                  <Avatar className="h-7 w-7">
                     <AvatarImage
                       src={session.user?.image || ""}
                       alt={session.user?.name || ""}
                     />
-                    <AvatarFallback className="bg-gradient-to-br from-blue-600 to-indigo-600 text-white text-xs">
+                    <AvatarFallback className="bg-primary text-primary-foreground text-xs">
                       {getInitials(session.user?.name || "U")}
                     </AvatarFallback>
                   </Avatar>
-                  <span className="hidden lg:inline-block font-medium">
+                  <span className="hidden lg:inline-block text-sm">
                     {session.user?.name?.split(" ")[0]}
                   </span>
-                  <ChevronDown className="h-4 w-4 opacity-50" />
+                  <ChevronDown className="h-3.5 w-3.5 opacity-50" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56 p-2">
-                <div className="flex items-center gap-3 p-2 mb-2">
-                  <Avatar className="h-10 w-10">
+              <DropdownMenuContent align="end" className="w-52">
+                <div className="flex items-center gap-2 px-2 py-1.5">
+                  <Avatar className="h-8 w-8">
                     <AvatarImage
                       src={session.user?.image || ""}
                       alt={session.user?.name || ""}
                     />
-                    <AvatarFallback className="bg-gradient-to-br from-blue-600 to-indigo-600 text-white">
+                    <AvatarFallback className="bg-primary text-primary-foreground text-xs">
                       {getInitials(session.user?.name || "U")}
                     </AvatarFallback>
                   </Avatar>
@@ -137,25 +126,25 @@ export function Header() {
                     <span className="text-sm font-medium">
                       {session.user?.name}
                     </span>
-                    <span className="text-xs text-muted-foreground truncate max-w-[150px]">
+                    <span className="text-xs text-muted-foreground truncate max-w-[140px]">
                       {session.user?.email}
                     </span>
                   </div>
                 </div>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem asChild className="cursor-pointer">
+                <DropdownMenuItem asChild className="cursor-pointer text-sm">
                   <Link href="/dashboard">
                     <LayoutDashboard className="mr-2 h-4 w-4" />
                     Tableau de bord
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem asChild className="cursor-pointer">
+                <DropdownMenuItem asChild className="cursor-pointer text-sm">
                   <Link href="/dashboard/mes-cours">
                     <User className="mr-2 h-4 w-4" />
                     Mes cours
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem asChild className="cursor-pointer">
+                <DropdownMenuItem asChild className="cursor-pointer text-sm">
                   <Link href="/dashboard/profil">
                     <Settings className="mr-2 h-4 w-4" />
                     Paramètres
@@ -164,7 +153,7 @@ export function Header() {
                 {session.user?.role === "ADMIN" && (
                   <>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem asChild className="cursor-pointer">
+                    <DropdownMenuItem asChild className="cursor-pointer text-sm">
                       <Link href="/admin">
                         <Settings className="mr-2 h-4 w-4" />
                         Administration
@@ -175,7 +164,7 @@ export function Header() {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   onClick={() => signOut({ callbackUrl: "/" })}
-                  className="cursor-pointer text-destructive focus:text-destructive focus:bg-destructive/10"
+                  className="cursor-pointer text-sm text-destructive focus:text-destructive"
                 >
                   <LogOut className="mr-2 h-4 w-4" />
                   Déconnexion
@@ -184,19 +173,12 @@ export function Header() {
             </DropdownMenu>
           ) : (
             <>
-              <Button variant="ghost" className="hover:bg-muted/50" asChild>
+              <Button variant="ghost" size="sm" asChild>
                 <Link href="/connexion">Connexion</Link>
               </Button>
-              <motion.div
-                className="relative group"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <div className="absolute -inset-0.5 rounded-lg bg-blue-600/20 blur-sm group-hover:bg-blue-600/30 transition-all duration-300" />
-                <Button className="relative bg-blue-600 hover:bg-blue-700 text-white shadow-sm" asChild>
-                  <Link href="/inscription">Créer mon compte</Link>
-                </Button>
-              </motion.div>
+              <Button size="sm" asChild>
+                <Link href="/inscription">S'inscrire</Link>
+              </Button>
             </>
           )}
         </div>
