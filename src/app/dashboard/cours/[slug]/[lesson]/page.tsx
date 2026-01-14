@@ -330,7 +330,7 @@ async function LessonPageContent({ params }: LessonPageProps) {
         </div>
 
         {/* Lesson Content */}
-        <div className="flex-1 overflow-y-auto">
+        <div id="lesson-content-scroll" className="flex-1 overflow-y-auto">
           <div className="max-w-4xl mx-auto p-4 sm:p-6 md:p-8">
             {/* Video (if available) */}
             {currentLesson.videoUrl && (

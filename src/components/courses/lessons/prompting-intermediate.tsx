@@ -149,8 +149,13 @@ export function PromptingIntermediateLesson({ lessonId, isCompleted, nextLessonU
       setCompletedSections((prev) => new Set([...prev, currentSection]));
     }
     setCurrentSection(index);
-    // Scroll vers le haut de la page
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    // Scroll vers le haut du conteneur de leçon
+    const scrollContainer = document.getElementById("lesson-content-scroll");
+    if (scrollContainer) {
+      scrollContainer.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
   };
 
   const analyzePrompt = (text: string) => {

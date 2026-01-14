@@ -111,8 +111,13 @@ export function PromptingBeginnerLesson({ lessonId, isCompleted, nextLessonUrl }
       setCompletedSections((prev) => new Set([...prev, currentSection]));
     }
     setCurrentSection(index);
-    // Scroll vers le haut de la page
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    // Scroll vers le haut du conteneur de leçon
+    const scrollContainer = document.getElementById("lesson-content-scroll");
+    if (scrollContainer) {
+      scrollContainer.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
   };
 
   const handleQuizComplete = (quizIndex: number, isCorrect: boolean) => {
