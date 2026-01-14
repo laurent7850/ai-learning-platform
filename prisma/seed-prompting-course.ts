@@ -27,13 +27,13 @@ async function main() {
       thumbnail: "https://images.unsplash.com/photo-1655720828018-edd2daec9349?w=800&q=80",
       level: Level.BEGINNER,
       category: "prompting",
-      duration: 90,
+      duration: 135,
       published: true,
       requiredPlan: Plan.FREE,
       chapters: {
         create: [
           {
-            title: "Niveau Débutant",
+            title: "Module 1 : Les Fondamentaux",
             order: 1,
             lessons: {
               create: [
@@ -49,8 +49,24 @@ async function main() {
             },
           },
           {
-            title: "Niveau Intermédiaire",
+            title: "Module 2 : Cas d'usage au quotidien",
             order: 2,
+            lessons: {
+              create: [
+                {
+                  title: "Cas d'usage IA au quotidien",
+                  slug: "usecase-debutant",
+                  content: "INTERACTIVE_LESSON:usecase-beginner",
+                  duration: 45,
+                  order: 1,
+                  isFree: true,
+                },
+              ],
+            },
+          },
+          {
+            title: "Module 3 : Techniques Avancées",
+            order: 3,
             lessons: {
               create: [
                 {
@@ -79,6 +95,7 @@ async function main() {
   console.log("Cours créé avec succès:");
   console.log(`  - Titre: ${course.title}`);
   console.log(`  - Slug: ${course.slug}`);
+  console.log(`  - Durée: ${course.duration} minutes`);
   console.log(`  - Chapitres: ${course.chapters.length}`);
   course.chapters.forEach((chapter) => {
     console.log(`    - ${chapter.title}: ${chapter.lessons.length} leçon(s)`);
