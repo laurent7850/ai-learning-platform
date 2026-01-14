@@ -368,43 +368,45 @@ async function LessonPageContent({ params }: LessonPageProps) {
           </div>
         </div>
 
-        {/* Navigation Bar */}
-        <div className="flex items-center justify-between p-3 sm:p-4 border-t bg-background">
-          {previousLesson ? (
-            <Button variant="outline" size="sm" className="sm:size-default" asChild>
-              <Link
-                href={`/dashboard/cours/${slug}/${previousLesson.lesson.slug}`}
-              >
-                <ChevronLeft className="h-4 w-4 sm:mr-2" />
-                <span className="hidden sm:inline">Précédent</span>
-              </Link>
-            </Button>
-          ) : (
-            <div />
-          )}
+        {/* Navigation Bar - seulement pour les leçons non-interactives */}
+        {!currentLesson.content.startsWith("INTERACTIVE_LESSON:") && (
+          <div className="flex items-center justify-between p-3 sm:p-4 border-t bg-background">
+            {previousLesson ? (
+              <Button variant="outline" size="sm" className="sm:size-default" asChild>
+                <Link
+                  href={`/dashboard/cours/${slug}/${previousLesson.lesson.slug}`}
+                >
+                  <ChevronLeft className="h-4 w-4 sm:mr-2" />
+                  <span className="hidden sm:inline">Précédent</span>
+                </Link>
+              </Button>
+            ) : (
+              <div />
+            )}
 
-          {/* Mobile progress indicator */}
-          <div className="lg:hidden flex items-center gap-2">
-            <span className="text-xs text-muted-foreground">{progressPercentage}%</span>
-            <Progress value={progressPercentage} className="h-2 w-16" />
+            {/* Mobile progress indicator */}
+            <div className="lg:hidden flex items-center gap-2">
+              <span className="text-xs text-muted-foreground">{progressPercentage}%</span>
+              <Progress value={progressPercentage} className="h-2 w-16" />
+            </div>
+
+            {nextLesson ? (
+              <Button size="sm" className="sm:size-default" asChild>
+                <Link href={`/dashboard/cours/${slug}/${nextLesson.lesson.slug}`}>
+                  <span className="hidden sm:inline">Suivant</span>
+                  <ChevronRight className="h-4 w-4 sm:ml-2" />
+                </Link>
+              </Button>
+            ) : (
+              <Button size="sm" className="sm:size-default" asChild>
+                <Link href="/dashboard/mes-cours">
+                  <span className="hidden sm:inline">Terminer</span>
+                  <span className="sm:hidden">Fin</span>
+                </Link>
+              </Button>
+            )}
           </div>
-
-          {nextLesson ? (
-            <Button size="sm" className="sm:size-default" asChild>
-              <Link href={`/dashboard/cours/${slug}/${nextLesson.lesson.slug}`}>
-                <span className="hidden sm:inline">Suivant</span>
-                <ChevronRight className="h-4 w-4 sm:ml-2" />
-              </Link>
-            </Button>
-          ) : (
-            <Button size="sm" className="sm:size-default" asChild>
-              <Link href="/dashboard/mes-cours">
-                <span className="hidden sm:inline">Terminer</span>
-                <span className="sm:hidden">Fin</span>
-              </Link>
-            </Button>
-          )}
-        </div>
+        )}
       </main>
     </div>
   );
