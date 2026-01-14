@@ -189,97 +189,35 @@ export function PromptingIntermediateLesson({ lessonId, isCompleted, nextLessonU
 
   return (
     <div className="max-w-4xl mx-auto">
-      {/* Progress & Skills */}
-      <div className="bg-card rounded-xl p-4 mb-6 border border-border">
-        <div className="flex justify-between items-center mb-2">
-          <span className="text-sm text-muted-foreground">Progression du module</span>
-          <span className="font-mono text-primary font-bold">{completedSections.size} / {sections.length} complétés</span>
+      {/* Progress Bar - Design épuré */}
+      <div className="flex items-center gap-4 mb-6">
+        <span className="text-xs text-muted-foreground whitespace-nowrap">Progression</span>
+        <div className="flex-1 h-1.5 bg-muted rounded-full overflow-hidden">
+          <div
+            className="h-full bg-violet-500 rounded-full transition-all duration-500"
+            style={{ width: `${progress}%` }}
+          />
         </div>
-        <Progress value={progress} className="h-2 mb-4" />
-
-        <div className="flex justify-center gap-8 pt-2">
-          <div className="text-center">
-            <div className="relative w-16 h-16 mx-auto mb-1">
-              <svg className="w-16 h-16 transform -rotate-90">
-                <circle cx="32" cy="32" r="28" stroke="currentColor" strokeWidth="4" fill="none" className="text-muted" />
-                <circle
-                  cx="32" cy="32" r="28"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                  fill="none"
-                  strokeDasharray={`${skillTechniques * 1.76} 176`}
-                  className="text-primary transition-all duration-500"
-                />
-              </svg>
-              <span className="absolute inset-0 flex items-center justify-center text-xs font-mono font-bold text-primary">
-                {skillTechniques}%
-              </span>
-            </div>
-            <span className="text-xs text-muted-foreground">Techniques</span>
-          </div>
-          <div className="text-center">
-            <div className="relative w-16 h-16 mx-auto mb-1">
-              <svg className="w-16 h-16 transform -rotate-90">
-                <circle cx="32" cy="32" r="28" stroke="currentColor" strokeWidth="4" fill="none" className="text-muted" />
-                <circle
-                  cx="32" cy="32" r="28"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                  fill="none"
-                  strokeDasharray={`${skillPractice * 1.76} 176`}
-                  className="text-pink-500 transition-all duration-500"
-                />
-              </svg>
-              <span className="absolute inset-0 flex items-center justify-center text-xs font-mono font-bold text-pink-500">
-                {skillPractice}%
-              </span>
-            </div>
-            <span className="text-xs text-muted-foreground">Pratique</span>
-          </div>
-          <div className="text-center">
-            <div className="relative w-16 h-16 mx-auto mb-1">
-              <svg className="w-16 h-16 transform -rotate-90">
-                <circle cx="32" cy="32" r="28" stroke="currentColor" strokeWidth="4" fill="none" className="text-muted" />
-                <circle
-                  cx="32" cy="32" r="28"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                  fill="none"
-                  strokeDasharray={`${skillMastery * 1.76} 176`}
-                  className="text-violet-500 transition-all duration-500"
-                />
-              </svg>
-              <span className="absolute inset-0 flex items-center justify-center text-xs font-mono font-bold text-violet-500">
-                {skillMastery}%
-              </span>
-            </div>
-            <span className="text-xs text-muted-foreground">Maîtrise</span>
-          </div>
-        </div>
+        <span className="text-xs font-medium text-violet-500">{progress}%</span>
       </div>
 
-      {/* Navigation Tabs */}
-      <div className="flex flex-wrap gap-2 mb-8 justify-center">
+      {/* Navigation Tabs - Design léger */}
+      <div className="flex flex-wrap gap-1.5 mb-8 justify-center">
         {sections.map((section, index) => (
           <button
             key={section.id}
             onClick={() => goToSection(index)}
             className={cn(
-              "flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all",
+              "px-3 py-1.5 rounded-full text-xs font-medium transition-all",
               currentSection === index
-                ? "bg-gradient-to-r from-violet-500 to-pink-500 text-white shadow-lg shadow-violet-500/25"
+                ? "bg-violet-500 text-white shadow-sm"
                 : completedSections.has(index)
-                ? "bg-violet-500/20 text-violet-400 border border-violet-500/50"
-                : "bg-card border border-border text-muted-foreground hover:border-violet-500 hover:text-foreground"
+                ? "bg-violet-500/10 text-violet-500"
+                : "text-muted-foreground hover:text-foreground hover:bg-muted"
             )}
           >
-            <span className={cn(
-              "w-6 h-6 rounded-md flex items-center justify-center text-xs font-bold",
-              currentSection === index ? "bg-white/20" : "bg-muted"
-            )}>
-              {completedSections.has(index) ? "✓" : index + 1}
-            </span>
             {section.label}
+            {completedSections.has(index) && <span className="ml-1 text-[10px]">✓</span>}
           </button>
         ))}
       </div>

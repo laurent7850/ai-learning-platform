@@ -34,7 +34,7 @@ export function Checklist({ items, onAllCompleted }: ChecklistProps) {
   };
 
   return (
-    <ul className="space-y-3">
+    <ul className="space-y-2">
       {items.map((item) => {
         const isChecked = checkedItems.has(item.id);
         return (
@@ -42,27 +42,27 @@ export function Checklist({ items, onAllCompleted }: ChecklistProps) {
             key={item.id}
             onClick={() => toggleItem(item.id)}
             className={cn(
-              "flex items-start gap-4 p-4 rounded-lg cursor-pointer transition-all",
-              "border bg-card hover:bg-muted/50",
-              isChecked && "bg-primary/5 border-primary"
+              "flex items-start gap-3 p-3 rounded-lg cursor-pointer transition-all",
+              "hover:bg-muted/50",
+              isChecked && "bg-primary/5"
             )}
           >
             <div
               className={cn(
-                "w-6 h-6 rounded-md border-2 flex items-center justify-center shrink-0 transition-all",
+                "w-5 h-5 rounded border flex items-center justify-center shrink-0 transition-all mt-0.5",
                 isChecked
                   ? "bg-primary border-primary"
                   : "border-muted-foreground/30"
               )}
             >
-              {isChecked && <Check className="h-4 w-4 text-primary-foreground" />}
+              {isChecked && <Check className="h-3 w-3 text-primary-foreground" />}
             </div>
             <div>
-              <h4 className="font-medium">
-                {item.emoji && <span className="mr-2">{item.emoji}</span>}
+              <h4 className="text-sm font-medium">
+                {item.emoji && <span className="mr-1.5">{item.emoji}</span>}
                 {item.title}
               </h4>
-              <p className="text-sm text-muted-foreground mt-1">
+              <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">
                 {item.description}
               </p>
             </div>

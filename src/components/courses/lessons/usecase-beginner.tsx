@@ -218,32 +218,35 @@ export function UseCaseBeginnerLesson({ lessonId, isCompleted, nextLessonUrl }: 
 
   return (
     <div className="max-w-4xl mx-auto">
-      {/* Progress Bar */}
-      <div className="bg-card rounded-xl p-4 mb-6 border border-border">
-        <div className="flex justify-between items-center mb-2">
-          <span className="text-sm text-muted-foreground">Progression du module</span>
-          <span className="font-mono text-amber-500 font-bold">{progress}%</span>
+      {/* Progress Bar - Design épuré */}
+      <div className="flex items-center gap-4 mb-6">
+        <span className="text-xs text-muted-foreground whitespace-nowrap">Progression</span>
+        <div className="flex-1 h-1.5 bg-muted rounded-full overflow-hidden">
+          <div
+            className="h-full bg-amber-500 rounded-full transition-all duration-500"
+            style={{ width: `${progress}%` }}
+          />
         </div>
-        <Progress value={progress} className="h-2" />
+        <span className="text-xs font-medium text-amber-500">{progress}%</span>
       </div>
 
-      {/* Navigation Tabs */}
-      <div className="flex flex-wrap gap-2 mb-8 justify-center">
+      {/* Navigation Tabs - Design léger */}
+      <div className="flex flex-wrap gap-1.5 mb-8 justify-center">
         {sections.map((section, index) => (
           <button
             key={section.id}
             onClick={() => goToSection(index)}
             className={cn(
-              "px-4 py-2 rounded-lg text-sm font-medium transition-all",
+              "px-3 py-1.5 rounded-full text-xs font-medium transition-all",
               currentSection === index
-                ? "bg-gradient-to-r from-amber-500 to-amber-600 text-white"
+                ? "bg-amber-500 text-white shadow-sm"
                 : completedSections.has(index)
-                ? "bg-amber-500/20 text-amber-500 border border-amber-500"
-                : "bg-card border border-border text-muted-foreground hover:border-amber-500 hover:text-foreground"
+                ? "bg-amber-500/10 text-amber-600"
+                : "text-muted-foreground hover:text-foreground hover:bg-muted"
             )}
           >
-            {completedSections.has(index) && "✓ "}
-            {index + 1}. {section.label}
+            {section.label}
+            {completedSections.has(index) && <span className="ml-1 text-[10px]">✓</span>}
           </button>
         ))}
       </div>

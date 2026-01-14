@@ -132,32 +132,35 @@ export function PromptingBeginnerLesson({ lessonId, isCompleted, nextLessonUrl }
 
   return (
     <div className="max-w-4xl mx-auto">
-      {/* Progress Bar */}
-      <div className="bg-card rounded-xl p-4 mb-6 border border-border">
-        <div className="flex justify-between items-center mb-2">
-          <span className="text-sm text-muted-foreground">Votre progression</span>
-          <span className="font-mono text-primary font-bold">{progress}%</span>
+      {/* Progress Bar - Design épuré */}
+      <div className="flex items-center gap-4 mb-6">
+        <span className="text-xs text-muted-foreground whitespace-nowrap">Progression</span>
+        <div className="flex-1 h-1.5 bg-muted rounded-full overflow-hidden">
+          <div
+            className="h-full bg-primary rounded-full transition-all duration-500"
+            style={{ width: `${progress}%` }}
+          />
         </div>
-        <Progress value={progress} className="h-2" />
+        <span className="text-xs font-medium text-primary">{progress}%</span>
       </div>
 
-      {/* Navigation Tabs */}
-      <div className="flex flex-wrap gap-2 mb-8 justify-center">
+      {/* Navigation Tabs - Design léger */}
+      <div className="flex flex-wrap gap-1.5 mb-8 justify-center">
         {sections.map((section, index) => (
           <button
             key={section.id}
             onClick={() => goToSection(index)}
             className={cn(
-              "px-4 py-2 rounded-lg text-sm font-medium transition-all",
+              "px-3 py-1.5 rounded-full text-xs font-medium transition-all",
               currentSection === index
-                ? "bg-primary text-primary-foreground"
+                ? "bg-primary text-primary-foreground shadow-sm"
                 : completedSections.has(index)
-                ? "bg-primary/20 text-primary border border-primary"
-                : "bg-card border border-border text-muted-foreground hover:border-primary hover:text-foreground"
+                ? "bg-primary/10 text-primary"
+                : "text-muted-foreground hover:text-foreground hover:bg-muted"
             )}
           >
-            {index + 1}. {section.label}
-            {completedSections.has(index) && " ✓"}
+            {section.label}
+            {completedSections.has(index) && <span className="ml-1 text-[10px]">✓</span>}
           </button>
         ))}
       </div>
@@ -171,37 +174,28 @@ export function PromptingBeginnerLesson({ lessonId, isCompleted, nextLessonUrl }
       >
         {/* Introduction */}
         {currentSection === 0 && (
-          <div className="space-y-6">
-            <div className="bg-card rounded-2xl p-6 border border-border">
-              <div className="flex items-start gap-4 mb-4">
-                <div className="p-3 rounded-xl bg-gradient-to-br from-emerald-500/20 to-teal-500/20">
-                  <MessageSquare className="h-6 w-6 text-emerald-500" />
-                </div>
-                <div>
-                  <h2 className="text-xl font-semibold">Qu'est-ce qu'un prompt ?</h2>
-                  <p className="text-sm text-muted-foreground">La base de toute interaction avec l'IA</p>
-                </div>
+          <div className="space-y-8">
+            <div>
+              <div className="flex items-center gap-3 mb-3">
+                <MessageSquare className="h-5 w-5 text-primary" />
+                <h2 className="text-lg font-semibold">Qu'est-ce qu'un prompt ?</h2>
               </div>
-              <p className="text-muted-foreground leading-relaxed">
+              <p className="text-muted-foreground leading-relaxed mb-4">
                 Un <strong className="text-foreground">prompt</strong>, c'est simplement le texte que vous envoyez à une IA comme ChatGPT ou Claude. C'est votre façon de lui parler, de lui poser une question ou de lui demander quelque chose.
               </p>
-
-              <TipBox variant="tip" icon="💡" title="Pensez-y comme une conversation :">
-                Plus vous êtes clair et précis dans votre demande, plus l'IA pourra vous aider efficacement. C'est exactement comme demander son chemin à quelqu'un !
-              </TipBox>
+              <div className="flex items-start gap-3 p-3 rounded-lg bg-amber-500/5 border border-amber-500/20">
+                <span className="text-base">💡</span>
+                <p className="text-sm text-muted-foreground">
+                  <strong className="text-foreground">Pensez-y comme une conversation :</strong> Plus vous êtes clair et précis, plus l'IA pourra vous aider efficacement.
+                </p>
+              </div>
             </div>
 
-            <div className="bg-card rounded-2xl p-6 border border-border">
-              <div className="flex items-start gap-4 mb-4">
-                <div className="p-3 rounded-xl bg-gradient-to-br from-emerald-500/20 to-teal-500/20">
-                  <Target className="h-6 w-6 text-emerald-500" />
-                </div>
-                <div>
-                  <h2 className="text-xl font-semibold">Pourquoi la qualité du prompt est importante ?</h2>
-                  <p className="text-sm text-muted-foreground">Le secret d'une bonne réponse</p>
-                </div>
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <Target className="h-5 w-5 text-primary" />
+                <h2 className="text-lg font-semibold">Pourquoi la qualité compte ?</h2>
               </div>
-
               <Comparison
                 before={{
                   label: "Prompt vague",
@@ -220,18 +214,12 @@ export function PromptingBeginnerLesson({ lessonId, isCompleted, nextLessonUrl }
 
         {/* Formula */}
         {currentSection === 1 && (
-          <div className="space-y-6">
-            <div className="bg-card rounded-2xl p-6 border border-border">
-              <div className="flex items-start gap-4 mb-6">
-                <div className="p-3 rounded-xl bg-gradient-to-br from-emerald-500/20 to-teal-500/20">
-                  <Sparkles className="h-6 w-6 text-emerald-500" />
-                </div>
-                <div>
-                  <h2 className="text-xl font-semibold">La Formule CRAFT</h2>
-                  <p className="text-sm text-muted-foreground">5 éléments pour un prompt parfait</p>
-                </div>
+          <div className="space-y-8">
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <Sparkles className="h-5 w-5 text-primary" />
+                <h2 className="text-lg font-semibold">La Formule CRAFT</h2>
               </div>
-
               <FormulaDisplay
                 title="La formule à retenir"
                 items={[
@@ -244,13 +232,14 @@ export function PromptingBeginnerLesson({ lessonId, isCompleted, nextLessonUrl }
               />
             </div>
 
-            <div className="bg-card rounded-2xl p-6 border border-border">
-              <Checklist items={craftItems} />
-            </div>
+            <Checklist items={craftItems} />
 
-            <TipBox variant="tip" icon="🚀" title="Astuce Pro :">
-              Vous n'avez pas besoin d'utiliser les 5 éléments à chaque fois. Commencez par Contexte + Action, puis ajoutez les autres selon vos besoins !
-            </TipBox>
+            <div className="flex items-start gap-3 p-3 rounded-lg bg-primary/5 border border-primary/20">
+              <span className="text-base">🚀</span>
+              <p className="text-sm text-muted-foreground">
+                <strong className="text-foreground">Astuce :</strong> Pas besoin d'utiliser les 5 éléments à chaque fois. Commencez par Contexte + Action !
+              </p>
+            </div>
           </div>
         )}
 

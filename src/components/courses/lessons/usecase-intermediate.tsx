@@ -187,47 +187,35 @@ export function UseCaseIntermediateLesson({ lessonId, isCompleted, nextLessonUrl
 
   return (
     <div className="max-w-4xl mx-auto">
-      {/* Progress & Skills */}
-      <div className="bg-card rounded-xl p-4 mb-6 border border-border">
-        <div className="flex justify-between items-center mb-2">
-          <span className="text-sm text-muted-foreground">Progression</span>
-          <span className="font-mono text-orange-500 font-bold">
-            {completedSections.size} / {sections.length}
-          </span>
+      {/* Progress Bar - Design épuré */}
+      <div className="flex items-center gap-4 mb-6">
+        <span className="text-xs text-muted-foreground whitespace-nowrap">Progression</span>
+        <div className="flex-1 h-1.5 bg-muted rounded-full overflow-hidden">
+          <div
+            className="h-full bg-orange-500 rounded-full transition-all duration-500"
+            style={{ width: `${progress}%` }}
+          />
         </div>
-        <Progress value={progress} className="h-2 mb-4" />
-
-        <div className="flex justify-center gap-8 pt-2">
-          {[
-            { label: "Techniques", value: skillTech, color: "text-orange-500" },
-            { label: "Pratique", value: skillPractice, color: "text-purple-500" },
-            { label: "Maîtrise", value: skillMastery, color: "text-teal-500" },
-          ].map((skill) => (
-            <div key={skill.label} className="text-center">
-              <div className={cn("text-2xl font-bold", skill.color)}>{skill.value}%</div>
-              <div className="text-xs text-muted-foreground">{skill.label}</div>
-            </div>
-          ))}
-        </div>
+        <span className="text-xs font-medium text-orange-500">{progress}%</span>
       </div>
 
-      {/* Navigation Tabs */}
-      <div className="flex flex-wrap gap-2 mb-8 justify-center">
+      {/* Navigation Tabs - Design léger */}
+      <div className="flex flex-wrap gap-1.5 mb-8 justify-center">
         {sections.map((section, index) => (
           <button
             key={section.id}
             onClick={() => goToSection(index)}
             className={cn(
-              "px-4 py-2 rounded-lg text-sm font-medium transition-all",
+              "px-3 py-1.5 rounded-full text-xs font-medium transition-all",
               currentSection === index
-                ? "bg-gradient-to-r from-orange-500 to-purple-500 text-white"
+                ? "bg-orange-500 text-white shadow-sm"
                 : completedSections.has(index)
-                ? "bg-orange-500/20 text-orange-500 border border-orange-500"
-                : "bg-card border border-border text-muted-foreground hover:border-orange-500 hover:text-foreground"
+                ? "bg-orange-500/10 text-orange-600"
+                : "text-muted-foreground hover:text-foreground hover:bg-muted"
             )}
           >
-            {completedSections.has(index) && "✓ "}
-            {index + 1}. {section.label}
+            {section.label}
+            {completedSections.has(index) && <span className="ml-1 text-[10px]">✓</span>}
           </button>
         ))}
       </div>
