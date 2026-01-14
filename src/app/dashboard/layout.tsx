@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
+import { usePathname } from "next/navigation";
 import { redirect } from "next/navigation";
 import { Sidebar } from "@/components/dashboard/sidebar";
 import { DashboardHeader } from "@/components/dashboard/dashboard-header";
@@ -13,6 +14,18 @@ export default function DashboardLayout({
 }) {
   const { status } = useSession();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const pathname = usePathname();
+
+  // Détecter si on est sur une page de leçon (mode focus)
+  const isLessonPage = pathname.match(/^\/dashboard\/cours\/[^/]+\/[^/]+$/);
+  const [focusMode, setFocusMode] = useState(false);
+
+  // Activer le mode focus automatiquement sur les pages de leçon
+  useEffect(() => {
+    if (isLessonPage) {
+      setFocusMode(true);
+    }
+  }, [isLessonPage]);
 
   if (status === "loading") {
     return (
@@ -24,6 +37,15 @@ export default function DashboardLayout({
 
   if (status === "unauthenticated") {
     redirect("/connexion");
+  }
+
+  // Mode focus pour les leçons : masquer la sidebar et le header principal
+  if (isLessonPage && focusMode) {
+    return (
+      <div className="min-h-screen">
+        {children}
+      </div>
+    );
   }
 
   return (

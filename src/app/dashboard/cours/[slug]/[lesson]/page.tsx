@@ -270,9 +270,9 @@ async function LessonPageContent({ params }: LessonPageProps) {
   }
 
   return (
-    <div className="flex min-h-[calc(100vh-4rem)] lg:h-[calc(100vh-4rem)]">
+    <div className="flex min-h-screen h-screen">
       {/* Sidebar - Course Navigation (Desktop) */}
-      <aside className="hidden lg:flex flex-col w-80 border-r bg-card overflow-hidden">
+      <aside className="hidden lg:flex flex-col w-72 border-r bg-card overflow-hidden shrink-0">
         <CourseSidebarContent
           course={course}
           slug={slug}
@@ -296,7 +296,7 @@ async function LessonPageContent({ params }: LessonPageProps) {
                   <span className="sr-only">Menu du cours</span>
                 </Button>
               </SheetTrigger>
-              <SheetContent side="left" className="w-80 p-0">
+              <SheetContent side="left" className="w-72 p-0">
                 <SheetHeader className="sr-only">
                   <SheetTitle>Navigation du cours</SheetTitle>
                 </SheetHeader>
@@ -403,8 +403,8 @@ export default function LessonPage({ params }: LessonPageProps) {
   return (
     <Suspense
       fallback={
-        <div className="flex min-h-[calc(100vh-4rem)] lg:h-[calc(100vh-4rem)]">
-          <aside className="hidden lg:block w-80 border-r bg-card p-4">
+        <div className="flex min-h-screen h-screen">
+          <aside className="hidden lg:block w-72 border-r bg-card p-4 shrink-0">
             <Skeleton className="h-8 w-full mb-4" />
             <Skeleton className="h-4 w-full mb-2" />
             <Skeleton className="h-2 w-full mb-6" />
