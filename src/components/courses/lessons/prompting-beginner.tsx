@@ -13,7 +13,9 @@ import {
   FormulaDisplay,
   TipBox,
 } from "@/components/courses/interactive";
+import { MarkCompleteButton } from "@/components/courses/mark-complete-button";
 import { cn } from "@/lib/utils";
+import type { InteractiveLessonProps } from "@/components/courses/lesson-content";
 
 const sections = [
   { id: "intro", label: "Introduction" },
@@ -97,7 +99,7 @@ const builderFields = [
   },
 ];
 
-export function PromptingBeginnerLesson() {
+export function PromptingBeginnerLesson({ lessonId, isCompleted, nextLessonUrl }: InteractiveLessonProps) {
   const [currentSection, setCurrentSection] = useState(0);
   const [completedSections, setCompletedSections] = useState<Set<number>>(new Set());
   const [quizResults, setQuizResults] = useState<Record<number, boolean>>({});
@@ -426,6 +428,17 @@ export function PromptingBeginnerLesson() {
                     Passez au niveau intermédiaire pour découvrir des techniques avancées comme le chain-of-thought, les exemples few-shot, et plus encore !
                   </TipBox>
                 </motion.div>
+              )}
+
+              {/* Marquer comme terminée - uniquement sur la dernière section */}
+              {lessonId && (
+                <div className="mt-8 pt-8 border-t">
+                  <MarkCompleteButton
+                    lessonId={lessonId}
+                    isCompleted={isCompleted || false}
+                    nextLessonUrl={nextLessonUrl}
+                  />
+                </div>
               )}
             </div>
           </div>

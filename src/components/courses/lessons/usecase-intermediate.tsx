@@ -17,7 +17,9 @@ import {
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { TipBox, Quiz, CodeBlock } from "@/components/courses/interactive";
+import { MarkCompleteButton } from "@/components/courses/mark-complete-button";
 import { cn } from "@/lib/utils";
+import type { InteractiveLessonProps } from "@/components/courses/lesson-content";
 
 const sections = [
   { id: "workflows", label: "Workflows" },
@@ -138,7 +140,7 @@ const referenceItems = [
   { emoji: "🔁", title: "Pipeline", desc: "Rédaction longue", code: "Angles → Plan → Sections → Révision" },
 ];
 
-export function UseCaseIntermediateLesson() {
+export function UseCaseIntermediateLesson({ lessonId, isCompleted, nextLessonUrl }: InteractiveLessonProps) {
   const [currentSection, setCurrentSection] = useState(0);
   const [completedSections, setCompletedSections] = useState<Set<number>>(new Set());
   const [selectedWorkflowStep, setSelectedWorkflowStep] = useState<number | null>(null);
@@ -549,6 +551,17 @@ export function UseCaseIntermediateLesson() {
                 Revoir les défis
               </Button>
             </div>
+
+            {/* Marquer comme terminée - uniquement sur la dernière section */}
+            {lessonId && (
+              <div className="mt-8 pt-8 border-t">
+                <MarkCompleteButton
+                  lessonId={lessonId}
+                  isCompleted={isCompleted || false}
+                  nextLessonUrl={nextLessonUrl}
+                />
+              </div>
+            )}
           </div>
         )}
       </motion.div>

@@ -11,7 +11,9 @@ import {
   TipBox,
   CodeBlock,
 } from "@/components/courses/interactive";
+import { MarkCompleteButton } from "@/components/courses/mark-complete-button";
 import { cn } from "@/lib/utils";
+import type { InteractiveLessonProps } from "@/components/courses/lesson-content";
 
 const sections = [
   { id: "techniques", label: "Techniques" },
@@ -128,7 +130,7 @@ Analyse [SUJET] et fournis des recommandations.
 Réfléchis étape par étape.`,
 };
 
-export function PromptingIntermediateLesson() {
+export function PromptingIntermediateLesson({ lessonId, isCompleted, nextLessonUrl }: InteractiveLessonProps) {
   const [currentSection, setCurrentSection] = useState(0);
   const [completedSections, setCompletedSections] = useState<Set<number>>(new Set());
   const [expandedTechnique, setExpandedTechnique] = useState<string | null>(null);
@@ -589,6 +591,17 @@ export function PromptingIntermediateLesson() {
               <TipBox variant="success" icon="🎓" className="mt-6">
                 Félicitations ! Vous maîtrisez maintenant les techniques avancées de prompt engineering !
               </TipBox>
+
+              {/* Marquer comme terminée - uniquement sur la dernière section */}
+              {lessonId && (
+                <div className="mt-8 pt-8 border-t">
+                  <MarkCompleteButton
+                    lessonId={lessonId}
+                    isCompleted={isCompleted || false}
+                    nextLessonUrl={nextLessonUrl}
+                  />
+                </div>
+              )}
             </div>
           </div>
         )}

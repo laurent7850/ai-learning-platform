@@ -340,20 +340,31 @@ async function LessonPageContent({ params }: LessonPageProps) {
             )}
 
             {/* Content */}
-            <LessonContent content={currentLesson.content} />
+            <LessonContent
+              content={currentLesson.content}
+              lessonId={currentLesson.id}
+              isCompleted={isCompleted}
+              nextLessonUrl={
+                nextLesson
+                  ? `/dashboard/cours/${slug}/${nextLesson.lesson.slug}`
+                  : undefined
+              }
+            />
 
-            {/* Mark Complete */}
-            <div className="mt-6 sm:mt-8 pt-6 sm:pt-8 border-t">
-              <MarkCompleteButton
-                lessonId={currentLesson.id}
-                isCompleted={isCompleted}
-                nextLessonUrl={
-                  nextLesson
-                    ? `/dashboard/cours/${slug}/${nextLesson.lesson.slug}`
-                    : undefined
-                }
-              />
-            </div>
+            {/* Mark Complete - seulement pour les leçons non-interactives */}
+            {!currentLesson.content.startsWith("INTERACTIVE_LESSON:") && (
+              <div className="mt-6 sm:mt-8 pt-6 sm:pt-8 border-t">
+                <MarkCompleteButton
+                  lessonId={currentLesson.id}
+                  isCompleted={isCompleted}
+                  nextLessonUrl={
+                    nextLesson
+                      ? `/dashboard/cours/${slug}/${nextLesson.lesson.slug}`
+                      : undefined
+                  }
+                />
+              </div>
+            )}
           </div>
         </div>
 

@@ -2,6 +2,13 @@
 
 import dynamic from "next/dynamic";
 
+// Types pour les leçons interactives
+export interface InteractiveLessonProps {
+  lessonId?: string;
+  isCompleted?: boolean;
+  nextLessonUrl?: string;
+}
+
 // Lazy load interactive lessons pour optimiser le bundle
 const PromptingBeginnerLesson = dynamic(
   () => import("./lessons/prompting-beginner").then((mod) => mod.PromptingBeginnerLesson),
@@ -24,7 +31,7 @@ const UseCaseIntermediateLesson = dynamic(
 );
 
 // Mapping des leçons interactives
-const interactiveLessons: Record<string, React.ComponentType> = {
+const interactiveLessons: Record<string, React.ComponentType<InteractiveLessonProps>> = {
   "prompting-beginner": PromptingBeginnerLesson,
   "prompting-intermediate": PromptingIntermediateLesson,
   "usecase-beginner": UseCaseBeginnerLesson,
@@ -33,16 +40,19 @@ const interactiveLessons: Record<string, React.ComponentType> = {
 
 interface LessonContentProps {
   content: string;
+  lessonId?: string;
+  isCompleted?: boolean;
+  nextLessonUrl?: string;
 }
 
-export function LessonContent({ content }: LessonContentProps) {
+export function LessonContent({ content, lessonId, isCompleted, nextLessonUrl }: LessonContentProps) {
   // Vérifier si c'est une leçon interactive
   if (content.startsWith("INTERACTIVE_LESSON:")) {
-    const lessonId = content.replace("INTERACTIVE_LESSON:", "").trim();
-    const InteractiveComponent = interactiveLessons[lessonId];
+    const interactiveLessonKey = content.replace("INTERACTIVE_LESSON:", "").trim();
+    const InteractiveComponent = interactiveLessons[interactiveLessonKey];
 
     if (InteractiveComponent) {
-      return <InteractiveComponent />;
+      return <InteractiveComponent lessonId={lessonId} isCompleted={isCompleted} nextLessonUrl={nextLessonUrl} />;
     }
 
     // Fallback si la leçon interactive n'existe pas
