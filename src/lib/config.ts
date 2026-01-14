@@ -28,17 +28,36 @@ export const navItems = [
   },
 ];
 
+// Sujets des cours (indépendants du niveau)
+export const subjects = [
+  { id: "prompting", name: "Prompt Engineering", slug: "prompting", icon: "Sparkles", description: "Maîtriser l'art de communiquer avec l'IA" },
+  { id: "chatgpt-claude", name: "ChatGPT & Claude", slug: "chatgpt-claude", icon: "MessageSquare", description: "Utiliser les assistants IA conversationnels" },
+  { id: "images-ia", name: "Génération d'images", slug: "images-ia", icon: "Image", description: "Créer des visuels avec Midjourney, DALL-E..." },
+  { id: "automatisation", name: "Automatisation", slug: "automatisation", icon: "Bot", description: "Automatiser ses tâches avec l'IA" },
+  { id: "productivite", name: "Productivité", slug: "productivite", icon: "Zap", description: "Booster sa productivité au quotidien" },
+  { id: "marketing-ia", name: "Marketing IA", slug: "marketing-ia", icon: "TrendingUp", description: "IA pour le marketing et la création de contenu" },
+  { id: "dev-ia", name: "IA pour développeurs", slug: "ia-developpeurs", icon: "Code", description: "Coder plus vite avec l'IA" },
+  { id: "rag", name: "RAG & Chatbots", slug: "rag", icon: "Database", description: "Créer des assistants IA personnalisés" },
+];
+
+// Niveaux de difficulté
+export const levels = [
+  { id: "BEGINNER", name: "Débutant", slug: "BEGINNER", description: "Aucun prérequis, idéal pour commencer" },
+  { id: "INTERMEDIATE", name: "Intermédiaire", slug: "INTERMEDIATE", description: "Bases acquises, approfondir ses compétences" },
+];
+
+// Legacy: garder pour compatibilité avec l'ancien code
 export const categories = {
   BEGINNER: [
     { id: "intro-ia", name: "Introduction à l'IA", slug: "introduction-ia", icon: "Brain" },
     { id: "chatgpt", name: "Maîtriser ChatGPT / Claude", slug: "chatgpt-claude", icon: "MessageSquare" },
-    { id: "prompting-base", name: "L'art du prompting", slug: "prompting-bases", icon: "Sparkles" },
+    { id: "prompting-base", name: "L'art du prompting", slug: "prompting", icon: "Sparkles" },
     { id: "productivite", name: "IA et productivité", slug: "productivite", icon: "Zap" },
     { id: "images-ia", name: "Générer des images IA", slug: "images-ia", icon: "Image" },
     { id: "ethique", name: "IA et éthique", slug: "ethique-ia", icon: "Shield" },
   ],
   INTERMEDIATE: [
-    { id: "prompting-avance", name: "Prompting avancé", slug: "prompting-avance", icon: "Target" },
+    { id: "prompting-avance", name: "Prompting avancé", slug: "prompting", icon: "Target" },
     { id: "automatisation", name: "Automatisation IA", slug: "automatisation", icon: "Bot" },
     { id: "marketing-ia", name: "IA pour le marketing", slug: "marketing-ia", icon: "TrendingUp" },
     { id: "data-ia", name: "Analyse de données IA", slug: "analyse-donnees", icon: "BarChart" },

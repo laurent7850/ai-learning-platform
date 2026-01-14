@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { Search, X } from "lucide-react";
+import { Search, X, GraduationCap, BookOpen } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,14 +11,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { categories } from "@/lib/config";
+import { subjects, levels } from "@/lib/config";
 
 export function CourseFilters() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
   const level = searchParams.get("level") || "all";
-  const category = searchParams.get("category") || "all";
+  const subject = searchParams.get("category") || "all";
   const search = searchParams.get("search") || "";
 
   const updateFilter = (key: string, value: string) => {
@@ -35,14 +35,7 @@ export function CourseFilters() {
     router.push("/cours");
   };
 
-  const hasFilters = level !== "all" || category !== "all" || search !== "";
-
-  const allCategories = [
-    ...categories.BEGINNER,
-    ...categories.INTERMEDIATE,
-  ].filter(
-    (cat, index, self) => index === self.findIndex((c) => c.id === cat.id)
-  );
+  const hasFilters = level !== "all" || subject !== "all" || search !== "";
 
   return (
     <div className="space-y-4">
@@ -61,28 +54,33 @@ export function CourseFilters() {
         {/* Level filter */}
         <Select value={level} onValueChange={(v) => updateFilter("level", v)}>
           <SelectTrigger className="w-full sm:w-[180px]">
+            <GraduationCap className="h-4 w-4 mr-2 text-muted-foreground" />
             <SelectValue placeholder="Niveau" />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">Tous les niveaux</SelectItem>
-            <SelectItem value="BEGINNER">Débutant</SelectItem>
-            <SelectItem value="INTERMEDIATE">Intermédiaire</SelectItem>
+            {levels.map((lvl) => (
+              <SelectItem key={lvl.id} value={lvl.slug}>
+                {lvl.name}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
 
-        {/* Category filter */}
+        {/* Subject filter */}
         <Select
-          value={category}
+          value={subject}
           onValueChange={(v) => updateFilter("category", v)}
         >
           <SelectTrigger className="w-full sm:w-[220px]">
-            <SelectValue placeholder="Catégorie" />
+            <BookOpen className="h-4 w-4 mr-2 text-muted-foreground" />
+            <SelectValue placeholder="Sujet" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">Toutes les catégories</SelectItem>
-            {allCategories.map((cat) => (
-              <SelectItem key={cat.id} value={cat.slug}>
-                {cat.name}
+            <SelectItem value="all">Tous les sujets</SelectItem>
+            {subjects.map((subj) => (
+              <SelectItem key={subj.id} value={subj.slug}>
+                {subj.name}
               </SelectItem>
             ))}
           </SelectContent>
@@ -91,8 +89,20 @@ export function CourseFilters() {
 
       {/* Active filters */}
       {hasFilters && (
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           <span className="text-sm text-muted-foreground">Filtres actifs:</span>
+          {level !== "all" && (
+            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary">
+              <GraduationCap className="h-3 w-3 mr-1" />
+              {levels.find(l => l.slug === level)?.name}
+            </span>
+          )}
+          {subject !== "all" && (
+            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-secondary text-secondary-foreground">
+              <BookOpen className="h-3 w-3 mr-1" />
+              {subjects.find(s => s.slug === subject)?.name}
+            </span>
+          )}
           <Button
             variant="ghost"
             size="sm"
@@ -100,7 +110,7 @@ export function CourseFilters() {
             className="h-7 text-xs"
           >
             <X className="h-3 w-3 mr-1" />
-            Effacer tout
+            Effacer
           </Button>
         </div>
       )}

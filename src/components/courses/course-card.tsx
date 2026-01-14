@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Clock, Users, Lock, Sparkles, Brain, Palette, Zap, MessageSquare, Wand2 } from "lucide-react";
+import { Clock, Users, Lock, Sparkles, Brain, Palette, Zap, MessageSquare, Wand2, Bot, TrendingUp, Code, Database, GraduationCap } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
@@ -14,56 +14,69 @@ interface CourseCardProps {
   showProgress?: boolean;
 }
 
-// Mapping des catégories vers les icônes et couleurs
-const categoryConfig: Record<string, { icon: React.ElementType; gradient: string; iconBg: string }> = {
-  chatgpt: {
-    icon: MessageSquare,
-    gradient: "from-emerald-500/20 to-teal-500/20",
-    iconBg: "bg-emerald-500/10 text-emerald-500",
-  },
+// Configuration par sujet (catégorie)
+const subjectConfig: Record<string, { icon: React.ElementType; name: string; gradient: string; iconBg: string }> = {
   prompting: {
     icon: Sparkles,
+    name: "Prompt Engineering",
     gradient: "from-violet-500/20 to-purple-500/20",
     iconBg: "bg-violet-500/10 text-violet-500",
   },
-  image: {
+  "chatgpt-claude": {
+    icon: MessageSquare,
+    name: "ChatGPT & Claude",
+    gradient: "from-emerald-500/20 to-teal-500/20",
+    iconBg: "bg-emerald-500/10 text-emerald-500",
+  },
+  "images-ia": {
     icon: Palette,
+    name: "Génération d'images",
     gradient: "from-pink-500/20 to-rose-500/20",
     iconBg: "bg-pink-500/10 text-pink-500",
   },
-  automation: {
-    icon: Zap,
+  automatisation: {
+    icon: Bot,
+    name: "Automatisation",
     gradient: "from-amber-500/20 to-orange-500/20",
     iconBg: "bg-amber-500/10 text-amber-500",
   },
-  ai: {
-    icon: Brain,
-    gradient: "from-blue-500/20 to-cyan-500/20",
+  productivite: {
+    icon: Zap,
+    name: "Productivité",
+    gradient: "from-yellow-500/20 to-amber-500/20",
+    iconBg: "bg-yellow-500/10 text-yellow-500",
+  },
+  "marketing-ia": {
+    icon: TrendingUp,
+    name: "Marketing IA",
+    gradient: "from-blue-500/20 to-indigo-500/20",
     iconBg: "bg-blue-500/10 text-blue-500",
   },
+  "ia-developpeurs": {
+    icon: Code,
+    name: "IA pour développeurs",
+    gradient: "from-slate-500/20 to-zinc-500/20",
+    iconBg: "bg-slate-500/10 text-slate-500",
+  },
+  rag: {
+    icon: Database,
+    name: "RAG & Chatbots",
+    gradient: "from-cyan-500/20 to-blue-500/20",
+    iconBg: "bg-cyan-500/10 text-cyan-500",
+  },
   default: {
-    icon: Wand2,
+    icon: Brain,
+    name: "Intelligence Artificielle",
     gradient: "from-primary/20 to-accent/20",
     iconBg: "bg-primary/10 text-primary",
   },
-};
-
-// Tags pour chaque catégorie
-const categoryTags: Record<string, string[]> = {
-  chatgpt: ["IA Conversationnelle", "Productivité"],
-  prompting: ["Techniques", "Optimisation"],
-  image: ["Création Visuelle", "Design"],
-  automation: ["Workflow", "Efficacité"],
-  ai: ["Machine Learning", "Innovation"],
-  default: ["Formation", "IA"],
 };
 
 export function CourseCard({ course, showProgress = false }: CourseCardProps) {
   const hasProgress = showProgress && course.progressPercentage !== undefined;
   const isLocked = course.requiredPlan !== "FREE";
 
-  const config = categoryConfig[course.category] || categoryConfig.default;
-  const tags = categoryTags[course.category] || categoryTags.default;
+  const config = subjectConfig[course.category] || subjectConfig.default;
   const IconComponent = config.icon;
 
   return (
@@ -87,31 +100,27 @@ export function CourseCard({ course, showProgress = false }: CourseCardProps) {
               <div className="absolute top-4 right-4">
                 <div className="flex items-center gap-1 rounded-full bg-background/90 backdrop-blur-sm px-2.5 py-1 text-xs font-medium shadow-sm">
                   <Lock className="h-3 w-3" />
-                  {course.requiredPlan === "BEGINNER" ? "Débutant" : "Pro"}
+                  Premium
                 </div>
               </div>
             )}
 
-            {/* Tags */}
-            <div className="flex flex-wrap gap-2 mt-4">
-              {tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="text-xs px-2 py-1 rounded-md bg-background/60 backdrop-blur-sm text-foreground/70"
-                >
-                  {tag}
-                </span>
-              ))}
+            {/* Sujet */}
+            <div className="mt-4">
+              <span className="text-xs px-2.5 py-1 rounded-full bg-background/80 backdrop-blur-sm text-foreground/80 font-medium">
+                {config.name}
+              </span>
             </div>
           </div>
 
           <CardContent className="p-5">
-            {/* Level badge */}
+            {/* Niveau */}
             <div className="flex items-center gap-2 mb-3">
               <Badge
                 variant={course.level === "BEGINNER" ? "beginner" : "intermediate"}
                 className="text-xs"
               >
+                <GraduationCap className="h-3 w-3 mr-1" />
                 {course.level === "BEGINNER" ? "Débutant" : "Intermédiaire"}
               </Badge>
             </div>
