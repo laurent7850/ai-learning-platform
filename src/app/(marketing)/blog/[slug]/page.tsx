@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { ArrowLeft, Clock, User, Calendar } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -18,6 +19,8 @@ const blogPosts = [
     author: "Marie Leroux",
     date: new Date("2024-01-15"),
     readTime: 12,
+    image: "https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=1200&h=630&fit=crop",
+    imageAlt: "Interface ChatGPT avec logo OpenAI",
     content: `
 ## Introduction au Prompting
 
@@ -62,6 +65,8 @@ Le prompting est une compétence qui s'améliore avec la pratique. N'hésitez pa
     author: "Thomas Durand",
     date: new Date("2024-01-10"),
     readTime: 8,
+    image: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=1200&h=630&fit=crop",
+    imageAlt: "Robot humanoïde représentant l'IA générative",
     content: `
 ## L'IA Générative en 2024
 
@@ -102,6 +107,8 @@ L'IA devient un partenaire créatif incontournable pour les artistes, designers 
     author: "Sophie Martin",
     date: new Date("2024-01-05"),
     readTime: 10,
+    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&h=630&fit=crop",
+    imageAlt: "Dashboard d'automatisation et productivité",
     content: `
 ## Pourquoi Automatiser ?
 
@@ -151,6 +158,8 @@ Commencez petit, automatisez une tâche à la fois, et mesurez les gains de temp
     author: "Pierre Bernard",
     date: new Date("2024-01-02"),
     readTime: 15,
+    image: "https://images.unsplash.com/photo-1531746790731-6c087fecd65a?w=1200&h=630&fit=crop",
+    imageAlt: "Intelligence artificielle et comparaison technologique",
     content: `
 ## Introduction
 
@@ -200,6 +209,8 @@ Le meilleur choix dépend de votre cas d'usage. N'hésitez pas à tester les deu
     author: "Marie Leroux",
     date: new Date("2023-12-28"),
     readTime: 11,
+    image: "https://images.unsplash.com/photo-1547891654-e66ed7ebb968?w=1200&h=630&fit=crop",
+    imageAlt: "Art digital et création visuelle par IA",
     content: `
 ## Qu'est-ce que Midjourney ?
 
@@ -250,6 +261,8 @@ Midjourney est un outil puissant qui devient plus efficace avec la pratique. Exp
     author: "Thomas Durand",
     date: new Date("2023-12-20"),
     readTime: 7,
+    image: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=1200&h=630&fit=crop",
+    imageAlt: "Éthique et intelligence artificielle",
     content: `
 ## Pourquoi l'Éthique IA est Importante
 
@@ -353,9 +366,15 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             </div>
           </header>
 
-          {/* Featured image placeholder */}
-          <div className="aspect-video rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 mb-12 flex items-center justify-center">
-            <span className="text-muted-foreground">Image à venir</span>
+          {/* Featured image */}
+          <div className="aspect-video relative rounded-xl overflow-hidden mb-12">
+            <Image
+              src={post.image}
+              alt={post.imageAlt}
+              fill
+              className="object-cover"
+              priority
+            />
           </div>
 
           {/* Content */}
